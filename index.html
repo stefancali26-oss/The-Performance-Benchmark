@@ -6,277 +6,149 @@
 <title>The Elite Performance Benchmark — Coach Cali</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --orange: #E8580A;
-    --orange-light: #FF6B2B;
-    --dark: #111111;
-    --dark2: #1C1C1C;
-    --dark3: #2A2A2A;
-    --mid: #3A3A3A;
-    --grey: #888;
-    --light: #F5F5F5;
-    --white: #ffffff;
-    --green: #22C55E;
-    --amber: #F59E0B;
-    --red: #EF4444;
+    --orange: #E8580A; --orange-light: #FF6B2B;
+    --dark: #111111; --dark2: #1C1C1C; --dark3: #2A2A2A;
+    --grey: #888; --white: #ffffff;
+    --green: #22C55E; --amber: #F59E0B; --red: #EF4444;
     --radius: 12px;
   }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--dark);
-    color: var(--white);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── SCREENS ── */
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; overflow-x: hidden; }
   .screen { display: none; min-height: 100vh; flex-direction: column; }
   .screen.active { display: flex; }
-
-  /* ── HEADER ── */
-  .header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 24px;
-    border-bottom: 1px solid #222;
-  }
+  .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid #222; }
   .logo { font-size: 14px; font-weight: 700; color: var(--orange); letter-spacing: 0.05em; }
   .logo span { color: var(--white); }
-  .back-btn {
-    background: none; border: none; color: var(--grey);
-    font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;
-  }
+  .back-btn { background: none; border: none; color: var(--grey); font-size: 13px; cursor: pointer; }
   .back-btn:hover { color: var(--white); }
-
-  /* ── HERO ── */
-  .hero {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 48px 24px; text-align: center;
-    max-width: 680px; margin: 0 auto; width: 100%;
-  }
-
-  .tag {
-    display: inline-block;
-    background: rgba(232,88,10,0.15); color: var(--orange);
-    border: 1px solid rgba(232,88,10,0.3);
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; padding: 6px 14px;
-    border-radius: 20px; margin-bottom: 20px;
-  }
-
+  .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; text-align: center; max-width: 680px; margin: 0 auto; width: 100%; }
+  .tag { display: inline-block; background: rgba(232,88,10,0.15); color: var(--orange); border: 1px solid rgba(232,88,10,0.3); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 20px; }
   h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
   h1 .orange { color: var(--orange); }
-
-  .subtitle {
-    font-size: 16px; color: #aaa; line-height: 1.6;
-    max-width: 500px; margin: 0 auto 36px;
-  }
-
-  /* ── SPORT GRID ── */
-  .sport-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 12px; width: 100%; max-width: 480px;
-  }
-
-  .sport-card {
-    background: var(--dark2); border: 1.5px solid #2A2A2A;
-    border-radius: var(--radius); padding: 20px 16px;
-    cursor: pointer; transition: all 0.2s; text-align: center;
-  }
+  .subtitle { font-size: 16px; color: #aaa; line-height: 1.6; max-width: 500px; margin: 0 auto 36px; }
+  .sport-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 480px; }
+  .sport-card { background: var(--dark2); border: 1.5px solid #2A2A2A; border-radius: var(--radius); padding: 20px 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
   .sport-card:hover { border-color: var(--orange); transform: translateY(-2px); }
   .sport-card.selected { border-color: var(--orange); background: rgba(232,88,10,0.1); }
-
   .sport-icon { font-size: 28px; margin-bottom: 8px; }
   .sport-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
   .sport-sub { font-size: 11px; color: var(--grey); }
-
-  /* ── BUTTONS ── */
-  .btn-primary {
-    background: var(--orange); color: var(--white);
-    border: none; border-radius: 10px;
-    padding: 16px 32px; font-size: 15px; font-weight: 700;
-    cursor: pointer; width: 100%; max-width: 400px;
-    transition: all 0.2s; letter-spacing: 0.02em;
-  }
+  .btn-primary { background: var(--orange); color: var(--white); border: none; border-radius: 10px; padding: 16px 32px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; max-width: 400px; transition: all 0.2s; }
   .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); }
   .btn-primary:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
-
-  .btn-ghost {
-    background: none; color: var(--orange);
-    border: 1.5px solid var(--orange); border-radius: 10px;
-    padding: 14px 28px; font-size: 14px; font-weight: 600;
-    cursor: pointer; width: 100%; max-width: 400px;
-    transition: all 0.2s;
-  }
+  .btn-ghost { background: none; color: var(--orange); border: 1.5px solid var(--orange); border-radius: 10px; padding: 14px 28px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; max-width: 400px; transition: all 0.2s; }
   .btn-ghost:hover { background: rgba(232,88,10,0.1); }
-
-  /* ── EMAIL GATE ── */
-  .gate-box {
-    background: var(--dark2); border: 1px solid #2A2A2A;
-    border-radius: 16px; padding: 36px 32px;
-    max-width: 440px; width: 100%; margin: 0 auto;
-  }
+  .gate-box { background: var(--dark2); border: 1px solid #2A2A2A; border-radius: 16px; padding: 36px 32px; max-width: 440px; width: 100%; margin: 0 auto; }
   .gate-box h2 { font-size: 22px; margin-bottom: 8px; }
   .gate-box p { font-size: 14px; color: #aaa; margin-bottom: 24px; line-height: 1.5; }
-
   .input-group { margin-bottom: 14px; }
   .input-group label { display: block; font-size: 12px; color: var(--grey); margin-bottom: 6px; font-weight: 600; }
-  .input-group input {
-    width: 100%; background: var(--dark3); border: 1.5px solid #333;
-    border-radius: 8px; padding: 14px 16px; color: var(--white);
-    font-size: 15px; outline: none; transition: border-color 0.2s;
-  }
+  .input-group input { width: 100%; background: var(--dark3); border: 1.5px solid #333; border-radius: 8px; padding: 14px 16px; color: var(--white); font-size: 15px; outline: none; transition: border-color 0.2s; }
   .input-group input:focus { border-color: var(--orange); }
   .input-group input::placeholder { color: #555; }
-
   .privacy { font-size: 11px; color: #555; text-align: center; margin-top: 12px; }
-
-  /* ── PROGRESS ── */
-  .progress-bar {
-    height: 3px; background: #222;
-    position: relative; margin-bottom: 0;
-  }
-  .progress-fill {
-    height: 100%; background: var(--orange);
-    transition: width 0.4s ease;
-  }
-
-  /* ── METRIC INPUT ── */
+  .progress-bar { height: 3px; background: #222; }
+  .progress-fill { height: 100%; background: var(--orange); transition: width 0.4s ease; }
   .metric-screen { padding: 0; }
   .metric-content { flex: 1; padding: 32px 24px; max-width: 560px; margin: 0 auto; width: 100%; }
-
   .step-indicator { font-size: 12px; color: var(--grey); margin-bottom: 8px; font-weight: 600; }
   .metric-title { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
-  .metric-desc { font-size: 14px; color: #aaa; line-height: 1.5; margin-bottom: 28px; }
-
-  .elite-callout {
-    background: rgba(232,88,10,0.08); border: 1px solid rgba(232,88,10,0.2);
-    border-radius: 10px; padding: 14px 18px; margin-bottom: 24px;
-    display: flex; align-items: center; gap: 12px;
-  }
+  .metric-desc { font-size: 14px; color: #aaa; line-height: 1.5; margin-bottom: 20px; }
+  .elite-callout { background: rgba(232,88,10,0.08); border: 1px solid rgba(232,88,10,0.2); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
   .elite-callout .elite-icon { font-size: 22px; }
   .elite-callout .elite-text { font-size: 13px; color: #ccc; line-height: 1.4; }
   .elite-callout .elite-text strong { color: var(--orange); }
-
-  .metric-input-wrap { position: relative; margin-bottom: 8px; }
-  .metric-input-wrap input {
-    width: 100%; background: var(--dark2); border: 2px solid #333;
-    border-radius: 12px; padding: 20px 60px 20px 20px;
-    font-size: 32px; font-weight: 700; color: var(--white);
-    outline: none; transition: border-color 0.2s;
-  }
+  .metric-input-wrap { position: relative; margin-bottom: 6px; }
+  .metric-input-wrap input { width: 100%; background: var(--dark2); border: 2px solid #333; border-radius: 12px; padding: 20px 80px 20px 20px; font-size: 32px; font-weight: 700; color: var(--white); outline: none; transition: border-color 0.2s; }
   .metric-input-wrap input:focus { border-color: var(--orange); }
-  .metric-input-wrap .unit {
-    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-    font-size: 14px; color: var(--grey); font-weight: 600;
-  }
-  .input-hint { font-size: 12px; color: #555; margin-bottom: 24px; }
-
-  .skip-link {
-    text-align: center; margin-top: 12px;
-    font-size: 13px; color: var(--grey); cursor: pointer;
-  }
+  .metric-input-wrap .unit { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--grey); font-weight: 600; }
+  .input-hint { font-size: 12px; color: #555; margin-bottom: 16px; }
+  /* Bench calc */
+  .bench-calc { background: var(--dark2); border: 1px solid #333; border-radius: 10px; padding: 16px; margin-bottom: 18px; }
+  .bench-calc-title { font-size: 12px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+  .bench-calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .bench-calc-row input { background: var(--dark3); border: 1.5px solid #333; border-radius: 8px; padding: 12px 14px; color: var(--white); font-size: 16px; font-weight: 600; outline: none; text-align: center; }
+  .bench-calc-row input:focus { border-color: var(--orange); }
+  .bench-result { text-align: center; font-size: 13px; color: #aaa; padding: 10px; background: var(--dark3); border-radius: 8px; }
+  .bench-result strong { color: var(--orange); font-size: 20px; }
+  .use-calc-btn { width: 100%; margin-top: 10px; background: rgba(232,88,10,0.15); color: var(--orange); border: 1px solid rgba(232,88,10,0.3); border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .use-calc-btn:hover { background: rgba(232,88,10,0.25); }
+  .skip-link { text-align: center; margin-top: 12px; font-size: 13px; color: var(--grey); cursor: pointer; }
   .skip-link:hover { color: var(--white); }
-
-  /* ── RESULTS ── */
+  /* Results */
   .results-content { flex: 1; padding: 24px; max-width: 640px; margin: 0 auto; width: 100%; }
-
-  .results-header { margin-bottom: 24px; }
-  .results-header h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  .results-header { margin-bottom: 20px; }
+  .results-header h2 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
   .results-header p { font-size: 14px; color: #aaa; }
-
-  .sport-badge-result {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(232,88,10,0.12); border: 1px solid rgba(232,88,10,0.25);
-    border-radius: 20px; padding: 4px 12px;
-    font-size: 12px; color: var(--orange); font-weight: 700;
-    margin-bottom: 20px;
-  }
-
-  /* metric result card */
-  .result-card {
-    background: var(--dark2); border: 1px solid #2A2A2A;
-    border-radius: 14px; padding: 20px 22px; margin-bottom: 14px;
-  }
-  .result-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .sport-badge-result { display: inline-flex; align-items: center; gap: 6px; background: rgba(232,88,10,0.12); border: 1px solid rgba(232,88,10,0.25); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--orange); font-weight: 700; margin-bottom: 16px; }
+  .overall-card { background: var(--dark2); border: 1.5px solid var(--orange); border-radius: 16px; padding: 24px; margin-bottom: 16px; text-align: center; }
+  .overall-label { font-size: 12px; color: var(--grey); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .overall-score { font-size: 52px; font-weight: 900; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+  .overall-desc { font-size: 14px; color: #aaa; }
+  .result-card { background: var(--dark2); border: 1px solid #2A2A2A; border-radius: 14px; padding: 20px 22px; margin-bottom: 12px; }
+  .result-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
   .result-metric-name { font-size: 13px; color: var(--grey); font-weight: 600; margin-bottom: 4px; }
-  .result-scores { display: flex; align-items: baseline; gap: 6px; }
   .result-your-score { font-size: 28px; font-weight: 800; }
   .result-unit { font-size: 13px; color: var(--grey); }
-  .result-badge {
-    padding: 6px 14px; border-radius: 20px;
-    font-size: 12px; font-weight: 700; white-space: nowrap;
-  }
+  .result-badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; white-space: nowrap; }
   .badge-green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
   .badge-amber { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
   .badge-red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
-
-  /* percentile bar */
-  .pct-bar-wrap { position: relative; margin-bottom: 8px; }
-  .pct-bar-track {
-    height: 8px; background: #2A2A2A; border-radius: 4px; position: relative; overflow: hidden;
-  }
+  .pct-bar-track { height: 8px; background: #2A2A2A; border-radius: 4px; position: relative; overflow: hidden; margin-bottom: 4px; }
   .pct-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-  .pct-bar-median {
-    position: absolute; top: -4px; width: 2px; height: 16px;
-    background: var(--orange); border-radius: 1px;
-  }
-  .pct-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .pct-bar-median { position: absolute; top: -4px; width: 2px; height: 16px; background: var(--orange); border-radius: 1px; }
+  .pct-labels { display: flex; justify-content: space-between; margin-bottom: 8px; }
   .pct-label { font-size: 10px; color: #555; }
   .pct-label.mid { color: var(--orange); font-weight: 600; }
-
-  .vs-elite {
-    display: flex; align-items: center; gap: 8px; margin-top: 10px;
-    font-size: 13px; color: #aaa;
-  }
+  .vs-elite { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 13px; color: #aaa; }
   .vs-elite strong { color: var(--white); }
-
-  /* fix-it box */
-  .fix-box {
-    background: rgba(232,88,10,0.06); border-left: 3px solid var(--orange);
-    border-radius: 0 8px 8px 0; padding: 10px 14px; margin-top: 12px;
-  }
-  .fix-label { font-size: 10px; color: var(--orange); font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-  .fix-text { font-size: 13px; color: #ccc; line-height: 1.4; }
-
-  /* overall score */
-  .overall-card {
-    background: linear-gradient(135deg, #1C1C1C 0%, #222 100%);
-    border: 1.5px solid var(--orange); border-radius: 16px;
-    padding: 24px; margin-bottom: 20px; text-align: center;
-  }
-  .overall-label { font-size: 12px; color: var(--grey); font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-  .overall-score { font-size: 56px; font-weight: 900; color: var(--orange); line-height: 1; margin-bottom: 4px; }
-  .overall-desc { font-size: 14px; color: #aaa; }
-
-  /* CTA bottom */
-  .cta-card {
-    background: var(--orange); border-radius: 16px;
-    padding: 28px 24px; text-align: center; margin-top: 20px; margin-bottom: 32px;
-  }
-  .cta-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-  .cta-card p { font-size: 14px; color: rgba(255,255,255,0.85); margin-bottom: 20px; line-height: 1.5; }
-  .cta-white {
-    display: inline-block; background: var(--white); color: var(--orange);
-    border: none; border-radius: 10px; padding: 14px 28px;
-    font-size: 15px; font-weight: 800; cursor: pointer; width: 100%;
-    text-decoration: none; transition: all 0.2s;
-  }
-  .cta-white:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-
-  .data-note { font-size: 11px; color: #444; text-align: center; margin-top: 16px; padding-bottom: 24px; }
-
-  /* skip badge */
-  .skipped { opacity: 0.4; }
+  /* Fix box */
+  .fix-box { background: rgba(232,88,10,0.06); border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-top: 10px; }
+  .fix-label { font-size: 10px; color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .exercise-item { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(232,88,10,0.1); }
+  .exercise-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .exercise-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+  .exercise-cue { font-size: 12px; color: #aaa; margin-bottom: 3px; font-style: italic; }
+  .exercise-sets { font-size: 12px; color: var(--orange); font-weight: 600; }
+  .good-box { background: rgba(34,197,94,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 10px 14px; margin-top: 10px; }
+  .good-label { font-size: 10px; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .good-text { font-size: 13px; color: #ccc; }
+  /* DM CTA */
+  .dm-card { background: var(--dark2); border: 1.5px solid var(--orange); border-radius: 16px; padding: 24px; margin: 16px 0; text-align: center; }
+  .dm-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .dm-card p { font-size: 13px; color: #aaa; margin-bottom: 16px; line-height: 1.5; }
+  .dm-trigger { background: var(--dark3); border: 1px solid #444; border-radius: 10px; padding: 14px 20px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .dm-trigger-text { font-size: 16px; font-weight: 800; color: var(--orange); }
+  .copy-btn { background: var(--orange); color: var(--white); border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .copy-btn:hover { background: var(--orange-light); }
+  .copy-confirm { font-size: 12px; color: var(--green); margin-top: 6px; height: 16px; }
+  .ig-btn { display: block; background: linear-gradient(135deg, #833AB4, #E1306C, #F77737); color: var(--white); border: none; border-radius: 10px; padding: 14px 28px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; text-decoration: none; margin-top: 8px; }
+  /* Upsell */
+  .upsell-card { background: linear-gradient(135deg, #1a1a1a, #222); border: 1px solid #333; border-radius: 16px; padding: 24px; margin: 12px 0; }
+  .upsell-tag { display: inline-block; background: rgba(232,88,10,0.15); color: var(--orange); border: 1px solid rgba(232,88,10,0.3); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
+  .upsell-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .upsell-sub { font-size: 13px; color: #aaa; margin-bottom: 14px; line-height: 1.5; }
+  .upsell-features { list-style: none; margin-bottom: 16px; }
+  .upsell-features li { font-size: 13px; color: #ccc; padding: 4px 0; display: flex; align-items: center; gap: 8px; }
+  .upsell-features li::before { content: '✓'; color: var(--orange); font-weight: 700; }
+  .upsell-price { font-size: 28px; font-weight: 900; color: var(--white); margin-bottom: 14px; }
+  .upsell-price span { font-size: 14px; color: #aaa; font-weight: 400; }
+  .upsell-btn { display: block; background: var(--orange); color: var(--white); border: none; border-radius: 10px; padding: 14px 28px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; text-decoration: none; }
+  .upsell-btn:hover { background: var(--orange-light); }
+  /* Share */
+  .share-card { background: var(--dark2); border: 1px solid #2A2A2A; border-radius: 16px; padding: 20px 24px; margin: 12px 0; text-align: center; }
+  .share-card p { font-size: 13px; color: #aaa; margin-bottom: 14px; }
+  .share-btn { background: none; color: var(--white); border: 1.5px solid #444; border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .share-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .share-text-box { background: var(--dark3); border: 1px solid #333; border-radius: 8px; padding: 14px; margin-top: 12px; font-size: 13px; color: #ccc; line-height: 1.6; text-align: left; display: none; }
+  .data-note { font-size: 11px; color: #333; text-align: center; padding: 16px 0 32px; }
+  /* Sport tag */
+  .sport-tag-display { display:none; background:rgba(232,88,10,0.1); border:1px solid rgba(232,88,10,0.2); border-radius:8px; padding:8px 14px; margin-bottom:12px; font-size:12px; color:var(--orange); font-weight:600; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ SCREEN 1: LANDING ═══════════════ -->
+<!-- SCREEN 1: LANDING -->
 <div class="screen active" id="screen-landing">
   <div class="header">
     <div class="logo">COACH <span>CALI</span></div>
@@ -285,7 +157,6 @@
     <div class="tag">Performance Benchmarking</div>
     <h1>The <span class="orange">Elite Performance</span> Benchmark</h1>
     <p class="subtitle">Enter your scores. See exactly where you stand against professional athletes. Find out what it takes to close the gap.</p>
-
     <p style="font-size:13px;color:#666;margin-bottom:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Select your sport</p>
     <div class="sport-grid">
       <div class="sport-card" onclick="selectSport('aflm')" id="card-aflm">
@@ -309,16 +180,13 @@
         <div class="sport-sub">WSL & elite programs</div>
       </div>
     </div>
-
     <div style="margin-top:28px;width:100%;max-width:480px;">
-      <button class="btn-primary" id="btn-start" onclick="goToEmail()" disabled>
-        See How You Compare →
-      </button>
+      <button class="btn-primary" id="btn-start" onclick="goToEmail()" disabled>See How You Compare →</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════ SCREEN 2: EMAIL GATE ═══════════════ -->
+<!-- SCREEN 2: EMAIL GATE -->
 <div class="screen" id="screen-email">
   <div class="header">
     <div class="logo">COACH <span>CALI</span></div>
@@ -329,7 +197,7 @@
       <div style="font-size:32px;margin-bottom:12px;">📊</div>
       <h2>Unlock Your Results</h2>
       <p>Enter your details to see your personalised elite benchmark report — including exactly what to train to close the gap.</p>
-
+      <div class="sport-tag-display" id="sport-tag-display"></div>
       <div class="input-group">
         <label>First name</label>
         <input type="text" id="input-name" placeholder="Your first name" oninput="checkEmail()">
@@ -342,17 +210,13 @@
         <label>Sport / position (optional)</label>
         <input type="text" id="input-sport-text" placeholder="e.g. AFL midfielder, soccer striker">
       </div>
-
-      <div id="sport-tag-display" style="display:none;background:rgba(232,88,10,0.1);border:1px solid rgba(232,88,10,0.2);border-radius:8px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#E8580A;font-weight:600;"></div>
-      <button class="btn-primary" id="btn-email" onclick="goToMetrics()" disabled style="margin-top:8px;">
-        Get My Benchmark →
-      </button>
-      <p class="privacy">No spam. Your details are used only to deliver your benchmark report and relevant coaching content from Coach Cali. Unsubscribe anytime.</p>
+      <button class="btn-primary" id="btn-email" onclick="goToMetrics()" disabled style="margin-top:8px;">Get My Benchmark →</button>
+      <p class="privacy">No spam. Used only to deliver your results and coaching content from Coach Cali. Unsubscribe anytime.</p>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════ SCREENS 3-6: METRICS ═══════════════ -->
+<!-- SCREEN 3: METRICS -->
 <div class="screen metric-screen" id="screen-metric">
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
   <div class="header">
@@ -367,17 +231,27 @@
       <div class="elite-icon">🏆</div>
       <div class="elite-text" id="elite-callout-text"></div>
     </div>
+    <!-- Bench calculator (hidden unless bench metric) -->
+    <div class="bench-calc" id="bench-calc" style="display:none">
+      <div class="bench-calc-title">⚡ Relative strength calculator</div>
+      <div class="bench-calc-row">
+        <input type="number" id="calc-bw" placeholder="Body weight (kg)" oninput="calcBench()">
+        <input type="number" id="calc-1rm" placeholder="Bench 1RM (kg)" oninput="calcBench()">
+      </div>
+      <div class="bench-result" id="bench-result">Enter your body weight and 1RM above</div>
+      <button class="use-calc-btn" onclick="useBenchCalc()">Use this value →</button>
+    </div>
     <div class="metric-input-wrap">
       <input type="number" id="metric-input" placeholder="0" oninput="onMetricInput()" step="0.01">
       <div class="unit" id="metric-unit"></div>
     </div>
     <div class="input-hint" id="input-hint"></div>
     <button class="btn-primary" id="btn-metric-next" onclick="nextMetric()" disabled>Next →</button>
-    <div class="skip-link" onclick="skipMetric()">Skip this test — I don't have this score</div>
+    <div class="skip-link" onclick="skipMetric()">Skip — I don't have this score</div>
   </div>
 </div>
 
-<!-- ═══════════════ SCREEN: RESULTS ═══════════════ -->
+<!-- SCREEN 4: RESULTS -->
 <div class="screen" id="screen-results">
   <div class="header">
     <div class="logo">COACH <span>CALI</span></div>
@@ -386,7 +260,7 @@
     <div class="results-header">
       <div class="sport-badge-result" id="result-sport-badge"></div>
       <h2 id="result-name-heading"></h2>
-      <p>Here's how your scores compare to elite athletes in your sport.</p>
+      <p>Here's exactly where you sit against elite athletes in your sport.</p>
     </div>
 
     <div class="overall-card">
@@ -397,235 +271,124 @@
 
     <div id="result-cards"></div>
 
-    <div class="cta-card">
-      <h3>Ready to Move Up the Ranks?</h3>
-      <p>Book a VALD testing session with Coach Cali. Get your exact percentile across every metric — then receive a personalised 8-week program built around your gaps.</p>
-      <a class="cta-white" href="https://www.instagram.com/coachcaliii" target="_blank">
-        Book With Coach Cali → @coachcaliii
-      </a>
+    <!-- DM CTA -->
+    <div class="dm-card">
+      <h3>Ready to get tested for real?</h3>
+      <p>DM Coach Cali on Instagram with the message below and we'll lock in your VALD testing session — the same tech used by every Premier League and AFL club.</p>
+      <div class="dm-trigger">
+        <div class="dm-trigger-text" id="dm-trigger-text"></div>
+        <button class="copy-btn" onclick="copyDM()">Copy</button>
+      </div>
+      <div class="copy-confirm" id="copy-confirm"></div>
+      <a class="ig-btn" href="https://www.instagram.com/coachcaliii" target="_blank">📲 Open Instagram → @coachcaliii</a>
     </div>
 
-    <p class="data-note">Elite benchmarks sourced from VALD Hub normative database 2024/25 and peer-reviewed sports science literature. Data represents elite athlete populations across AFL, AFLW, Premier League and Women's Super League.</p>
+    <!-- Upsell -->
+    <div class="upsell-card">
+      <div class="upsell-tag">Limited offer</div>
+      <div class="upsell-title">The 6-Week Elite Performance Program</div>
+      <div class="upsell-sub">A generalised training program built around the exact metrics tested here. Close the gap between where you are and where the pros train — works year round, any sport.</div>
+      <ul class="upsell-features">
+        <li>6 weeks of structured programming</li>
+        <li>Targets CMJ, Nordic strength & reactive power</li>
+        <li>Works alongside your existing sport training</li>
+        <li>Instant digital download</li>
+      </ul>
+      <div class="upsell-price">$9 <span>one-time</span></div>
+      <a class="upsell-btn" href="https://gumroad.com/YOUR_PRODUCT_LINK" target="_blank">Get the Program →</a>
+    </div>
+
+    <!-- Share -->
+    <div class="share-card">
+      <p>Show your teammates where you rank 👊</p>
+      <button class="share-btn" onclick="generateShare()">📤 Share my result</button>
+      <div class="share-text-box" id="share-text-box"></div>
+    </div>
+
+    <p class="data-note">Elite benchmarks sourced from VALD Hub normative database 2024/25 and peer-reviewed sports science literature.</p>
   </div>
 </div>
 
 <script>
-// ═══════════════ DATA ═══════════════
+// ═══ DATA ═══
+const EXERCISES = {
+  cmj: [
+    { name: 'Countermovement Jump with pause', cue: 'Pause 2 seconds at the bottom of the dip before exploding up — forces you to generate force from a dead stop, building explosive power.', sets: '4 sets × 5 reps — 90 sec rest' },
+    { name: 'Box Jump (step down)', cue: 'Jump onto a box, step down — never jump down. Focus on maximum height and soft landing mechanics. Reset fully between reps.', sets: '4 sets × 4 reps — 2 min rest' },
+    { name: 'Loaded Jump Squat (20-30% BW)', cue: 'Hold a light barbell or dumbbells, perform a quick dip and explode upward. Land soft. Speed of movement is the priority, not load.', sets: '3 sets × 6 reps — 90 sec rest' }
+  ],
+  nordic: [
+    { name: 'Nordic Hamstring Curl', cue: 'Anchor feet, lower your body as slowly as possible (3-5 seconds down), use hands to return. Every rep done slowly is worth three done fast.', sets: '3 sets × 4-6 reps — 2 min rest' },
+    { name: 'Romanian Deadlift (RDL)', cue: 'Push hips back, soft knee bend, bar stays close to the legs. Feel a deep stretch in the hamstrings at the bottom. Control the descent.', sets: '4 sets × 8 reps — 90 sec rest' },
+    { name: 'Single-Leg RDL (bodyweight or light load)', cue: 'Stand on one leg, hinge forward keeping hips square. Build the weaker side. This is your injury prevention exercise.', sets: '3 sets × 10 reps each side — 60 sec rest' }
+  ],
+  rsi: [
+    { name: 'Pogo Jumps', cue: 'Stay on your toes, minimise ground contact time. Think of the ground as hot — get off it as fast as possible. Keep the body tall and rigid.', sets: '4 sets × 15 seconds — 60 sec rest' },
+    { name: 'Depth Drop to Jump', cue: 'Step off a low box (20-30cm), land and immediately jump as high as possible. The landing and takeoff should feel like one movement.', sets: '4 sets × 5 reps — 2 min rest' },
+    { name: 'Continuous Broad Jumps', cue: 'Jump forward, land and immediately jump again. Minimise ground contact. Cover maximum distance in minimum time.', sets: '3 sets × 6 jumps — 90 sec rest' }
+  ],
+  bench: [
+    { name: 'Barbell Bench Press (70-80% 1RM)', cue: 'Retract shoulder blades, drive feet into the floor. Lower the bar with control (3 seconds down), press explosively. Control is the training — speed is the result.', sets: '4 sets × 6 reps — 2 min rest' },
+    { name: 'Weighted Push-Up or Dumbbell Press', cue: 'Add a plate to your back or use dumbbells. Focus on full range — chest to floor, full lockout. Build the movement before loading it.', sets: '3 sets × 10 reps — 90 sec rest' },
+    { name: 'Incline DB Press', cue: 'Set bench to 30 degrees. Dumbbells touch the outside of your chest at the bottom. This builds upper chest and shoulder stability for pressing strength.', sets: '3 sets × 10 reps — 90 sec rest' }
+  ]
+};
+
+const GOOD_ADVICE = {
+  cmj: 'Your jump height is at or above elite standard. Shift your focus to power quality — work on FT:CT and eccentric deceleration rather than chasing more height.',
+  nordic: 'Excellent hamstring output. Maintain with weekly eccentric loading (1-2 sessions) and monitor limb symmetry. Any asymmetry above 10% needs addressing immediately.',
+  rsi: 'Elite reactive strength. Use your RSI score as a weekly readiness marker — a drop of more than 10% is a signal to reduce training load that day.',
+  bench: 'Your relative pressing strength meets elite standards. Maintain with moderate volume and shift emphasis to power expression through velocity-based training.'
+};
+
 const BENCHMARKS = {
   aflm: {
-    label: 'AFL Men',
-    icon: '🏉',
+    label: 'AFL Men', icon: '🏉',
     metrics: [
-      {
-        id: 'cmj',
-        name: 'CMJ Jump Height',
-        unit: 'cm',
-        desc: 'Stand on two legs, dip and jump as high as you can. This is the gold standard measure of lower body explosive power used by every elite AFL club.',
-        eliteText: 'The average elite AFL player jumps <strong>40 cm</strong>. The top 25% clear <strong>43 cm</strong>.',
-        hint: 'Measured using a jump mat, ForceDecks, or an app like My Jump 2.',
-        median: 40, p25: 35, p75: 43, p99: 53,
-        fixBelow: 'Your jump height is below the AFL average. Focus on plyometric training — drop jumps, bounding, and loaded CMJ progressions will close this gap fastest.',
-        fixAbove: 'Your jump height is at or above AFL standard. Shift focus to power quality metrics like RSI and FT:CT to separate yourself further.',
-      },
-      {
-        id: 'nordic',
-        name: 'Nordic Hamstring Force',
-        unit: 'N',
-        desc: 'A measure of eccentric hamstring strength — how much force your hamstrings produce while lengthening under load. The #1 hamstring injury risk screening tool used in elite sport.',
-        eliteText: 'The average elite AFL player produces <strong>421 N</strong> of Nordic force. Imbalance between legs should be under <strong>7%</strong>.',
-        hint: 'Tested on a NordBord or Nordic curl setup. If you don\'t have a score, book a testing session.',
-        median: 421, p25: 366, p75: 470, p99: 600,
-        fixBelow: 'Your hamstring strength is below AFL standard — this is one of the most important gaps to close for both performance and injury prevention. Nordic curls 2x/week minimum.',
-        fixAbove: 'Strong hamstring output. Maintain with weekly eccentric loading and monitor limb symmetry closely.',
-      },
-      {
-        id: 'rsi',
-        name: 'Hop Test RSI',
-        unit: '',
-        desc: 'Reactive Strength Index — measures how effectively you use the stretch-shortening cycle. Jump, land, and immediately jump again. RSI = jump height ÷ ground contact time. Higher = better.',
-        eliteText: 'The average elite AFL player scores <strong>2.55 RSI</strong> on the hop test. Top 25% hit <strong>2.87+</strong>.',
-        hint: 'Tested on ForceDecks or a contact mat. Scores above 2.5 are considered elite for AFL.',
-        median: 2.55, p25: 2.18, p75: 2.87, p99: 3.66,
-        fixBelow: 'Your reactive strength is below AFL average. This directly impacts first-step speed and repeated sprint ability. Drop jump training and bounding circuits are your priority.',
-        fixAbove: 'Excellent reactive strength. You\'re moving like an elite AFL athlete. Maintain with reactive work and monitor fatigue-related drops.',
-      },
-      {
-        id: 'bench',
-        name: 'Bench Press',
-        unit: '× BW',
-        desc: 'Upper body push strength relative to your bodyweight. Divide your 1RM bench press by your bodyweight. AFL demands strength that travels with your body — relative strength is what matters.',
-        eliteText: 'Elite AFL players average a bench press of <strong>1.2–1.4× bodyweight</strong>. The benchmark is 1.3× BW for most positions.',
-        hint: 'e.g. if you weigh 85kg and bench 110kg, enter 1.29. Most phones have a calculator.',
-        median: 1.3, p25: 1.1, p75: 1.5, p99: 1.9,
-        fixBelow: 'Your relative upper body strength is below AFL standard. Prioritise compound pressing movements — bench press, push press, and DB incline work 2-3x/week.',
-        fixAbove: 'Your upper body strength is at or above AFL level. Shift to maintaining and developing power expression through velocity-based training.',
-      },
+      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'Stand on two legs, dip and jump as high as you can. The gold standard measure of lower body explosive power used by every elite AFL club.', eliteText:'The average elite AFL player jumps <strong>40 cm</strong>. Top 25% clear <strong>43 cm</strong>.', hint:'Use a jump mat, ForceDecks, or the My Jump 2 app for a good estimate.', median:40, p25:35, p75:43, p99:53, showCalc:false },
+      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'Eccentric hamstring strength — the #1 injury risk screening tool in elite sport. How much force your hamstrings produce under load.', eliteText:'The average elite AFL player produces <strong>421 N</strong> of Nordic force. Limb imbalance should be under <strong>7%</strong>.', hint:'Tested on a NordBord. If you don\'t have this score, it\'s the #1 reason to book a session.', median:421, p25:366, p75:470, p99:600, showCalc:false },
+      { id:'rsi', name:'Hop Test RSI', unit:'', desc:'Reactive Strength Index — jump, land, immediately jump again. RSI = jump height ÷ ground contact time. Higher is better. Directly linked to sprint speed and COD ability.', eliteText:'The average elite AFL player scores <strong>2.55 RSI</strong>. Top 25% hit <strong>2.87+</strong>.', hint:'Tested on ForceDecks. Scores above 2.5 are elite for AFL.', median:2.55, p25:2.18, p75:2.87, p99:3.66, showCalc:false },
+      { id:'bench', name:'Bench Press', unit:'× BW', desc:'Upper body push strength relative to your bodyweight. Divide your 1RM bench press by your bodyweight. Use the calculator below.', eliteText:'Elite AFL players average <strong>1.2–1.4× bodyweight</strong> on the bench press. The benchmark is <strong>1.3× BW</strong> for most positions.', hint:'Use the calculator above — enter your body weight and your 1 rep max.', median:1.3, p25:1.1, p75:1.5, p99:1.9, showCalc:true }
     ]
   },
   aflw: {
-    label: 'AFLW',
-    icon: '🏉',
+    label: 'AFLW', icon: '🏉',
     metrics: [
-      {
-        id: 'cmj',
-        name: 'CMJ Jump Height',
-        unit: 'cm',
-        desc: 'Stand on two legs, dip and jump as high as you can. The gold standard measure of lower body explosive power.',
-        eliteText: 'The average elite AFLW player jumps <strong>32 cm</strong>. Top 25% clear <strong>35 cm</strong>.',
-        hint: 'Measured using a jump mat, ForceDecks, or an app like My Jump 2.',
-        median: 32, p25: 28, p75: 35, p99: 43,
-        fixBelow: 'Your jump height is below the AFLW average. Plyometric training — reactive jumps, bounding, box jumps — will deliver the fastest improvements.',
-        fixAbove: 'Your jump height meets or exceeds AFLW standard. Focus on improving RSI and movement efficiency to separate further.',
-      },
-      {
-        id: 'nordic',
-        name: 'Nordic Hamstring Force',
-        unit: 'N',
-        desc: 'Eccentric hamstring strength — how much force your hamstrings can produce while lengthening. The #1 tool for hamstring injury risk screening in women\'s sport.',
-        eliteText: 'The average elite AFLW player produces <strong>302 N</strong>. Limb imbalance should be under <strong>7%</strong>.',
-        hint: 'Tested on a NordBord. If you don\'t have a score, this is exactly why you should book a testing session.',
-        median: 302, p25: 264, p75: 332, p99: 421,
-        fixBelow: 'Hamstring strength below AFLW average — this is a critical training and injury prevention priority. Nordic curls and Romanian deadlifts 2-3x/week.',
-        fixAbove: 'Your hamstring output is at AFLW standard. Maintain with weekly eccentric work and keep monitoring symmetry.',
-      },
-      {
-        id: 'rsi',
-        name: 'Hop Test RSI',
-        unit: '',
-        desc: 'Reactive Strength Index — your ability to absorb and reuse elastic energy. RSI = jump height ÷ contact time. Directly linked to sprint speed and change of direction.',
-        eliteText: 'The average elite AFLW player scores <strong>2.66 RSI</strong>. Top 25% reach <strong>2.95+</strong>.',
-        hint: 'Tested on ForceDecks. Scores above 2.5 are considered strong for female athletes.',
-        median: 2.66, p25: 2.32, p75: 2.95, p99: 3.59,
-        fixBelow: 'Reactive strength below AFLW average. This is a big driver of on-field speed and agility. Prioritise drop jumps and pogo progressions.',
-        fixAbove: 'Excellent reactive strength for an AFLW athlete. Maintain your reactive work and focus on sport-specific application.',
-      },
-      {
-        id: 'bench',
-        name: 'Bench Press',
-        unit: '× BW',
-        desc: 'Upper body push strength relative to your bodyweight. Divide your 1RM bench press by your body weight.',
-        eliteText: 'Elite AFLW players target <strong>0.8–1.0× bodyweight</strong> bench press as a solid strength standard.',
-        hint: 'e.g. if you weigh 65kg and bench 58kg, enter 0.89.',
-        median: 0.9, p25: 0.7, p75: 1.1, p99: 1.4,
-        fixBelow: 'Below the AFLW benchmark. Upper body strength supports tackling, marking contests, and durability. Prioritise progressive bench press and DB pressing.',
-        fixAbove: 'Your pressing strength is solid for AFLW. Maintain and focus on rotational power and overhead strength.',
-      },
+      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'The gold standard measure of lower body explosive power.', eliteText:'The average elite AFLW player jumps <strong>32 cm</strong>. Top 25% clear <strong>35 cm</strong>.', hint:'Use a jump mat, ForceDecks, or the My Jump 2 app.', median:32, p25:28, p75:35, p99:43, showCalc:false },
+      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'Eccentric hamstring strength — the #1 injury risk screening tool. Especially critical in women\'s sport where hamstring and ACL injury rates are higher.', eliteText:'The average elite AFLW player produces <strong>302 N</strong>. Limb imbalance should be under <strong>7%</strong>.', hint:'Tested on a NordBord.', median:302, p25:264, p75:332, p99:421, showCalc:false },
+      { id:'rsi', name:'Hop Test RSI', unit:'', desc:'Reactive Strength Index — how efficiently you absorb and reuse elastic energy. Directly linked to sprint speed and change of direction.', eliteText:'The average elite AFLW player scores <strong>2.66 RSI</strong>. Top 25% reach <strong>2.95+</strong>.', hint:'Tested on ForceDecks.', median:2.66, p25:2.32, p75:2.95, p99:3.59, showCalc:false },
+      { id:'bench', name:'Bench Press', unit:'× BW', desc:'Upper body push strength relative to your bodyweight. Use the calculator below.', eliteText:'Elite AFLW players target <strong>0.8–1.0× bodyweight</strong> as a solid pressing standard.', hint:'Enter your body weight and 1RM in the calculator above.', median:0.9, p25:0.7, p75:1.1, p99:1.4, showCalc:true }
     ]
   },
   soccerm: {
-    label: 'Premier League Men',
-    icon: '⚽',
+    label: 'Premier League Men', icon: '⚽',
     metrics: [
-      {
-        id: 'cmj',
-        name: 'CMJ Jump Height',
-        unit: 'cm',
-        desc: 'Countermovement jump height — the most widely used measure of lower body power in professional football. Used by every Premier League club.',
-        eliteText: 'The average Premier League player jumps <strong>39 cm</strong>. Top 25% clear <strong>43 cm</strong>. Data from 1,793 elite male players (2024/25 season).',
-        hint: 'Measured using ForceDecks or a jump mat. My Jump 2 app gives a reasonable estimate.',
-        median: 39, p25: 35, p75: 43, p99: 48,
-        fixBelow: 'Your jump is below Premier League average. Plyometric training — depth jumps, bounding, and CMJ loading progressions — will close this gap.',
-        fixAbove: 'Your jump height is at Premier League standard. To truly separate yourself, focus on EDRFD and FT:CT — the metrics that actually distinguish PL from Championship.',
-      },
-      {
-        id: 'nordic',
-        name: 'Nordic Hamstring Force',
-        unit: 'N',
-        desc: 'Peak eccentric hamstring strength — the gold standard injury screening tool. Used by every Premier League club. Hamstring injury is the #1 injury in professional football.',
-        eliteText: 'The average Premier League player produces <strong>435 N</strong>. This is consistent across all professional English leagues — it\'s the baseline every pro should meet.',
-        hint: 'Tested on a NordBord. If you don\'t have this score, book a testing session.',
-        median: 435, p25: 380, p75: 488, p99: 582,
-        fixBelow: 'Below Premier League Nordic standard. Hamstring strength is non-negotiable in football. Weekly Nordic curl loading is the most evidence-backed intervention available.',
-        fixAbove: 'Your hamstring strength meets Premier League standards. Maintain weekly eccentric loading and keep your limb symmetry under 10%.',
-      },
-      {
-        id: 'rsi',
-        name: 'Hop Test RSI',
-        unit: '',
-        desc: 'Reactive Strength Index from the hop test — how efficiently you can bounce and repeat explosive efforts. Directly linked to sprint speed and change of direction ability in football.',
-        eliteText: 'The average Premier League player scores <strong>2.8 RSI</strong> on the hop test. UEFA Champions League players average the same.',
-        hint: 'Tested on ForceDecks. Scores above 2.5 indicate strong reactive capacity for football.',
-        median: 2.8, p25: 2.3, p75: 3.1, p99: 3.6,
-        fixBelow: 'Reactive strength below Premier League average. This limits your ability to change direction and accelerate repeatedly. Prioritise reactive plyometrics and ground contact work.',
-        fixAbove: 'Your reactive strength is at Premier League level. Maintain and monitor — RSI drops are an early sign of fatigue and injury risk.',
-      },
-      {
-        id: 'bench',
-        name: 'Bench Press',
-        unit: '× BW',
-        desc: 'Relative upper body push strength. Football doesn\'t heavily test this, but upper body strength supports physical duels, shielding, and overall athleticism.',
-        eliteText: 'Elite soccer players who can bench <strong>1.0–1.3× bodyweight</strong> are considered strong for the sport. 1.0× BW is the solid baseline.',
-        hint: 'e.g. if you weigh 78kg and bench 85kg, enter 1.09.',
-        median: 1.1, p25: 0.9, p75: 1.3, p99: 1.6,
-        fixBelow: 'Below the football strength benchmark. While not the primary focus in football, improving upper body strength supports physical resilience and contact situations.',
-        fixAbove: 'Your upper body strength is solid for a footballer. Maintain with moderate volume and focus on lower body power development.',
-      },
+      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'The most widely used measure of lower body power in professional football. Used by every Premier League club, 33,606 times in the 2024/25 season alone.', eliteText:'The average Premier League player jumps <strong>39 cm</strong>. Top 25% clear <strong>43 cm</strong>. Data from 1,793 elite male players.', hint:'Use a jump mat, ForceDecks, or the My Jump 2 app.', median:39, p25:35, p75:43, p99:48, showCalc:false },
+      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'The gold standard hamstring injury screening tool. Hamstring injury is the #1 injury in professional football. Used by every Premier League club every week.', eliteText:'The average Premier League player produces <strong>435 N</strong>. Consistent across all professional English leagues — it\'s the universal pro baseline.', hint:'Tested on a NordBord.', median:435, p25:380, p75:488, p99:582, showCalc:false },
+      { id:'rsi', name:'Hop Test RSI', unit:'', desc:'Reactive Strength Index from the hop test — how efficiently you bounce and repeat explosive efforts. Linked directly to sprint speed and change of direction in football.', eliteText:'The average Premier League player scores <strong>2.8 RSI</strong>. UEFA Champions League players average the same.', hint:'Tested on ForceDecks.', median:2.8, p25:2.3, p75:3.1, p99:3.6, showCalc:false },
+      { id:'bench', name:'Bench Press', unit:'× BW', desc:'Relative upper body strength. Supports physical duels, shielding, and overall athletic durability. Use the calculator below.', eliteText:'Elite footballers who can bench <strong>1.0–1.3× bodyweight</strong> are considered strong for the sport.', hint:'Enter your body weight and 1RM in the calculator above.', median:1.1, p25:0.9, p75:1.3, p99:1.6, showCalc:true }
     ]
   },
   soccerw: {
-    label: "Women's Soccer",
-    icon: '⚽',
+    label: "Women's Soccer", icon: '⚽',
     metrics: [
-      {
-        id: 'cmj',
-        name: 'CMJ Jump Height',
-        unit: 'cm',
-        desc: 'Countermovement jump — the most widely used measure of explosive power in professional football.',
-        eliteText: 'The average elite women\'s soccer player jumps <strong>29 cm</strong> overall. Peak age group (20-30) averages <strong>31 cm</strong>.',
-        hint: 'Measured using ForceDecks or a jump mat.',
-        median: 29, p25: 25, p75: 33, p99: 38,
-        fixBelow: 'Below the women\'s soccer average. Reactive and plyometric training is your fastest path to improvement — focus on jump and land mechanics first.',
-        fixAbove: 'Your jump height meets elite women\'s soccer standard. Shift focus to reactive strength (RSI) and power quality metrics.',
-      },
-      {
-        id: 'nordic',
-        name: 'Nordic Hamstring Force',
-        unit: 'N',
-        desc: 'Eccentric hamstring strength — critical for injury prevention. ACL and hamstring injury rates are significantly higher in women\'s football, making this test especially important.',
-        eliteText: 'The average elite women\'s soccer player produces <strong>276 N</strong>. Peak age (20-30) averages <strong>301 N</strong>.',
-        hint: 'Tested on a NordBord. Limb symmetry should be under 10%.',
-        median: 276, p25: 227, p75: 319, p99: 418,
-        fixBelow: 'Hamstring strength below the women\'s soccer average. This is a major injury prevention priority. Nordic curls twice a week minimum, with focus on both limbs equally.',
-        fixAbove: 'Your hamstring strength meets elite women\'s soccer standards. Keep your weekly eccentric work and monitor limb symmetry closely.',
-      },
-      {
-        id: 'rsi',
-        name: 'Hop Test RSI',
-        unit: '',
-        desc: 'Reactive Strength Index — how well you absorb and reuse elastic energy. Directly linked to sprint speed, change of direction, and landing mechanics.',
-        eliteText: 'The average elite women\'s soccer player scores <strong>2.66 RSI</strong>. Peak age group (20-30) averages <strong>2.76</strong>.',
-        hint: 'Tested on ForceDecks. Scores above 2.5 indicate strong reactive capacity.',
-        median: 2.66, p25: 2.32, p75: 2.95, p99: 3.59,
-        fixBelow: 'Below the women\'s soccer RSI average. Reactive strength training is your priority — pogo jumps, depth drops, and continuous hopping progressions.',
-        fixAbove: 'Excellent reactive strength for women\'s soccer. Maintain your reactive work and use RSI to monitor your readiness week to week.',
-      },
-      {
-        id: 'bench',
-        name: 'Bench Press',
-        unit: '× BW',
-        desc: 'Relative upper body push strength. Supports physical contact, shielding, and overall strength base.',
-        eliteText: 'Elite female footballers who can bench <strong>0.7–0.9× bodyweight</strong> have a strong upper body base for the sport.',
-        hint: 'e.g. if you weigh 62kg and bench 50kg, enter 0.81.',
-        median: 0.8, p25: 0.6, p75: 1.0, p99: 1.2,
-        fixBelow: 'Upper body strength below the benchmark. Building a stronger press base will improve your physical resilience and contact strength on the pitch.',
-        fixAbove: 'Good upper body strength for a female footballer. Maintain and focus on rotational and overhead strength to complement your pressing.',
-      },
+      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'The most widely used measure of explosive power in professional football.', eliteText:'The average elite women\'s soccer player jumps <strong>29 cm</strong>. Peak age group (20-30) averages <strong>31 cm</strong>.', hint:'Use a jump mat, ForceDecks, or the My Jump 2 app.', median:29, p25:25, p75:33, p99:38, showCalc:false },
+      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'Critical for injury prevention. ACL and hamstring injury rates are significantly higher in women\'s football — this test is non-negotiable.', eliteText:'The average elite women\'s soccer player produces <strong>276 N</strong>. Peak age (20-30) averages <strong>301 N</strong>.', hint:'Tested on a NordBord.', median:276, p25:227, p75:319, p99:418, showCalc:false },
+      { id:'rsi', name:'Hop Test RSI', unit:'', desc:'Reactive Strength Index — how well you absorb and reuse elastic energy. Linked to sprint speed, change of direction, and landing mechanics.', eliteText:'The average elite women\'s soccer player scores <strong>2.66 RSI</strong>. Peak age group (20-30) averages <strong>2.76</strong>.', hint:'Tested on ForceDecks.', median:2.66, p25:2.32, p75:2.95, p99:3.59, showCalc:false },
+      { id:'bench', name:'Bench Press', unit:'× BW', desc:'Relative upper body push strength. Use the calculator below.', eliteText:'Elite female footballers who can bench <strong>0.7–0.9× bodyweight</strong> have a strong base for the sport.', hint:'Enter your body weight and 1RM in the calculator above.', median:0.8, p25:0.6, p75:1.0, p99:1.2, showCalc:true }
     ]
   }
 };
 
-// ═══════════════ STATE ═══════════════
-let selectedSport = null;
-let userName = '';
-let currentMetricIndex = 0;
-let userScores = {};
-let skippedMetrics = {};
+// ═══ STATE ═══
+let selectedSport = null, userName = '', currentMetricIndex = 0;
+let userScores = {}, skippedMetrics = {};
 
-// ═══════════════ NAVIGATION ═══════════════
-function goTo(screenId) {
+// ═══ NAV ═══
+function goTo(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
-  window.scrollTo(0, 0);
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
 
 function selectSport(sport) {
@@ -635,82 +398,75 @@ function selectSport(sport) {
   document.getElementById('btn-start').disabled = false;
 }
 
-function showSportTag() {
-  var labels = { aflm:'AFL Men', aflw:'AFLW', soccerm:'Premier League Men', soccerw:"Women's Soccer" };
-  var el = document.getElementById('sport-tag-display');
-  if (el && selectedSport) { el.style.display='block'; el.textContent='⚡ Benchmarking against: ' + labels[selectedSport]; }
-}
-
 function goToEmail() {
-  showSportTag();
   if (!selectedSport) return;
+  const labels = { aflm:'AFL Men', aflw:'AFLW', soccerm:'Premier League Men', soccerw:"Women's Soccer" };
+  const el = document.getElementById('sport-tag-display');
+  el.style.display = 'block';
+  el.textContent = '⚡ Benchmarking against: ' + labels[selectedSport];
   goTo('screen-email');
 }
 
 function checkEmail() {
-  const name = document.getElementById('input-name').value.trim();
-  const email = document.getElementById('input-email').value.trim();
-  const valid = name.length > 0 && email.includes('@') && email.includes('.');
-  document.getElementById('btn-email').disabled = !valid;
+  const n = document.getElementById('input-name').value.trim();
+  const e = document.getElementById('input-email').value.trim();
+  document.getElementById('btn-email').disabled = !(n.length > 0 && e.includes('@') && e.includes('.'));
 }
 
 function goToMetrics() {
   userName = document.getElementById('input-name').value.trim();
   const email = document.getElementById('input-email').value.trim();
   const sportText = document.getElementById('input-sport-text').value.trim();
-
-  // Submit to Mailchimp in background — non-blocking
   submitToMailchimp(email, userName, sportText);
-
-  currentMetricIndex = 0;
-  userScores = {};
-  skippedMetrics = {};
+  currentMetricIndex = 0; userScores = {}; skippedMetrics = {};
   showMetric(0);
   goTo('screen-metric');
 }
 
+// ═══ MAILCHIMP ═══
 function submitToMailchimp(email, fname, sportText) {
-  // Mailchimp JSONP submission — works cross-origin without API key
   const action = 'https://coachcali.us21.list-manage.com/subscribe/post-json?u=9f956008f59f50c07a3e70f4d&id=4dfda44567&f_id=00fea1e6f0';
-  const callbackName = 'mcCallback_' + Date.now();
-
+  const cb = 'mc_' + Date.now();
+  const labels = { aflm:'AFL Men', aflw:'AFLW', soccerm:'Premier League Men', soccerw:"Women's Soccer" };
   const params = new URLSearchParams({
-    EMAIL: email,
-    FNAME: fname,
-    SPORT: sportText || selectedSport || '',
-    'b_9f956008f59f50c07a3e70f4d_4dfda44567': '', // honeypot — must be blank
-    c: callbackName
+    EMAIL: email, FNAME: fname,
+    SPORT: sportText || (labels[selectedSport] || ''),
+    'b_9f956008f59f50c07a3e70f4d_4dfda44567': '',
+    c: cb
   });
-
-  // Create callback
-  window[callbackName] = function(data) {
-    // Silent — user never sees this
-    try { delete window[callbackName]; } catch(e) {}
-    if (script.parentNode) script.parentNode.removeChild(script);
-  };
-
-  // Inject JSONP script tag
-  const script = document.createElement('script');
-  script.src = action + '&' + params.toString();
-  document.head.appendChild(script);
-
-  // Cleanup after 10s regardless
-  setTimeout(function() {
-    try { delete window[callbackName]; } catch(e) {}
-    if (script.parentNode) script.parentNode.removeChild(script);
-  }, 10000);
+  window[cb] = function() { try { delete window[cb]; } catch(e){} if(s.parentNode) s.parentNode.removeChild(s); };
+  const s = document.createElement('script');
+  s.src = action + '&' + params.toString();
+  document.head.appendChild(s);
+  setTimeout(function(){ try{ delete window[cb]; }catch(e){} if(s.parentNode) s.parentNode.removeChild(s); }, 10000);
 }
 
+function submitScoresToMailchimp(email, scores, tags) {
+  // Re-submit with score data as merge fields
+  const action = 'https://coachcali.us21.list-manage.com/subscribe/post-json?u=9f956008f59f50c07a3e70f4d&id=4dfda44567&f_id=00fea1e6f0';
+  const cb = 'mc2_' + Date.now();
+  const params = new URLSearchParams({
+    EMAIL: email,
+    SCORES: scores,
+    TAGS: tags,
+    'b_9f956008f59f50c07a3e70f4d_4dfda44567': '',
+    c: cb
+  });
+  window[cb] = function() { try { delete window[cb]; } catch(e){} if(s.parentNode) s.parentNode.removeChild(s); };
+  const s = document.createElement('script');
+  s.src = action + '&' + params.toString();
+  document.head.appendChild(s);
+  setTimeout(function(){ try{ delete window[cb]; }catch(e){} if(s.parentNode) s.parentNode.removeChild(s); }, 10000);
+}
+
+// ═══ METRICS ═══
 function showMetric(index) {
   const metrics = BENCHMARKS[selectedSport].metrics;
   if (index >= metrics.length) { showResults(); return; }
-
   const m = metrics[index];
-  const total = metrics.length;
-  const pct = ((index) / total) * 100;
-
+  const pct = (index / metrics.length) * 100;
   document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('step-indicator').textContent = `Test ${index + 1} of ${total}`;
+  document.getElementById('step-indicator').textContent = 'Test ' + (index+1) + ' of ' + metrics.length;
   document.getElementById('metric-title').textContent = m.name;
   document.getElementById('metric-desc').textContent = m.desc;
   document.getElementById('elite-callout-text').innerHTML = m.eliteText;
@@ -718,18 +474,36 @@ function showMetric(index) {
   document.getElementById('input-hint').textContent = m.hint;
   document.getElementById('metric-input').value = '';
   document.getElementById('btn-metric-next').disabled = true;
+  document.getElementById('bench-calc').style.display = m.showCalc ? 'block' : 'none';
+  if (m.showCalc) { document.getElementById('calc-bw').value=''; document.getElementById('calc-1rm').value=''; document.getElementById('bench-result').textContent='Enter your body weight and 1RM above'; }
   document.getElementById('metric-input').focus();
 }
 
+function calcBench() {
+  const bw = parseFloat(document.getElementById('calc-bw').value);
+  const rm = parseFloat(document.getElementById('calc-1rm').value);
+  if (bw > 0 && rm > 0) {
+    const ratio = (rm / bw).toFixed(2);
+    document.getElementById('bench-result').innerHTML = 'Relative strength: <strong>' + ratio + '× BW</strong>';
+    window._benchCalcVal = ratio;
+  }
+}
+
+function useBenchCalc() {
+  if (window._benchCalcVal) {
+    document.getElementById('metric-input').value = window._benchCalcVal;
+    onMetricInput();
+  }
+}
+
 function onMetricInput() {
-  const val = document.getElementById('metric-input').value;
-  document.getElementById('btn-metric-next').disabled = val === '' || isNaN(parseFloat(val));
+  const v = document.getElementById('metric-input').value;
+  document.getElementById('btn-metric-next').disabled = v === '' || isNaN(parseFloat(v));
 }
 
 function nextMetric() {
   const m = BENCHMARKS[selectedSport].metrics[currentMetricIndex];
-  const val = parseFloat(document.getElementById('metric-input').value);
-  userScores[m.id] = val;
+  userScores[m.id] = parseFloat(document.getElementById('metric-input').value);
   currentMetricIndex++;
   showMetric(currentMetricIndex);
 }
@@ -747,9 +521,9 @@ function prevMetric() {
   showMetric(currentMetricIndex);
 }
 
-// ═══════════════ RESULTS ═══════════════
+// ═══ RESULTS ═══
 function getPctRank(score, m) {
-  if (score <= m.p25) return Math.round(((score - (m.p25 * 0.5)) / (m.p25 * 0.5)) * 25);
+  if (score <= m.p25) return Math.max(1, Math.round(((score - (m.p25*0.5)) / (m.p25*0.5)) * 25));
   if (score <= m.median) return Math.round(25 + ((score - m.p25) / (m.median - m.p25)) * 25);
   if (score <= m.p75) return Math.round(50 + ((score - m.median) / (m.p75 - m.median)) * 25);
   if (score <= m.p99) return Math.round(75 + ((score - m.p75) / (m.p99 - m.p75)) * 24);
@@ -757,10 +531,10 @@ function getPctRank(score, m) {
 }
 
 function getBadge(pct) {
-  if (pct >= 75) return { cls: 'badge-green', label: 'Elite Level' };
-  if (pct >= 50) return { cls: 'badge-amber', label: 'On Standard' };
-  if (pct >= 25) return { cls: 'badge-amber', label: 'Developing' };
-  return { cls: 'badge-red', label: 'Below Standard' };
+  if (pct >= 75) return { cls:'badge-green', label:'Elite Level' };
+  if (pct >= 50) return { cls:'badge-amber', label:'On Standard' };
+  if (pct >= 25) return { cls:'badge-amber', label:'Developing' };
+  return { cls:'badge-red', label:'Below Standard' };
 }
 
 function getBarColor(pct) {
@@ -772,100 +546,148 @@ function getBarColor(pct) {
 function showResults() {
   const sport = BENCHMARKS[selectedSport];
   const metrics = sport.metrics;
+  const email = document.getElementById('input-email').value.trim();
+  const labels = { aflm:'AFL Men', aflw:'AFLW', soccerm:'Premier League Men', soccerw:"Women's Soccer" };
 
-  // heading
   document.getElementById('result-sport-badge').innerHTML = sport.icon + ' ' + sport.label;
-  document.getElementById('result-name-heading').textContent = userName ? `${userName}'s Elite Benchmark` : 'Your Elite Benchmark';
+  document.getElementById('result-name-heading').textContent = (userName ? userName + "'s" : 'Your') + ' Elite Benchmark';
 
-  // calculate overall
-  let totalPct = 0; let counted = 0;
+  // Set DM trigger
+  document.getElementById('dm-trigger-text').textContent = 'TEST NOW - ' + labels[selectedSport];
+
+  // Calculate overall + build tags
+  let total = 0, counted = 0, scoreParts = [], tagParts = [];
   metrics.forEach(m => {
     if (userScores[m.id] !== undefined) {
-      totalPct += getPctRank(userScores[m.id], m);
-      counted++;
+      const pct = getPctRank(userScores[m.id], m);
+      total += pct; counted++;
+      scoreParts.push(m.name + ': ' + userScores[m.id] + ' ' + m.unit + ' (' + pct + '%ile)');
+      const level = pct >= 75 ? 'Elite' : pct >= 50 ? 'On Standard' : pct >= 25 ? 'Developing' : 'Below Standard';
+      tagParts.push(m.name + ': ' + level);
     }
   });
-  const avgPct = counted > 0 ? Math.round(totalPct / counted) : 0;
-  document.getElementById('overall-score').textContent = avgPct + '%ile';
+  const avg = counted > 0 ? Math.round(total / counted) : 0;
 
-  let desc = '';
-  if (avgPct >= 75) desc = 'You\'re performing at elite level. Keep pushing.';
-  else if (avgPct >= 50) desc = 'You\'re meeting professional standards. Targeted work will take you further.';
-  else if (avgPct >= 25) desc = 'You\'re on the development track. Clear gaps to close — let\'s get to work.';
-  else desc = 'Significant room to grow. The good news: these gaps respond fast to the right training.';
-  document.getElementById('overall-desc').textContent = desc;
+  // Submit scores to Mailchimp
+  if (email && scoreParts.length > 0) {
+    submitScoresToMailchimp(email, scoreParts.join(' | '), labels[selectedSport] + ' | ' + tagParts.join(' | '));
+  }
 
-  // build result cards
+  document.getElementById('overall-score').textContent = avg + '%ile';
+  const descs = [
+    [75, "You're performing at elite level. Keep pushing."],
+    [50, "You're meeting professional standards. Targeted work will take you further."],
+    [25, "You're on the development track. Clear gaps to close — let's get to work."],
+    [0,  "Significant room to grow. The good news: these gaps respond fast to the right training."]
+  ];
+  document.getElementById('overall-desc').textContent = descs.find(d => avg >= d[0])[1];
+
+  // Build result cards
   const container = document.getElementById('result-cards');
   container.innerHTML = '';
-
   metrics.forEach(m => {
     const skipped = skippedMetrics[m.id];
     const score = userScores[m.id];
     const pct = skipped ? null : getPctRank(score, m);
     const badge = skipped ? null : getBadge(pct);
     const barColor = skipped ? '#444' : getBarColor(pct);
-    const barWidth = skipped ? 0 : Math.min(pct, 99);
-    const medianPos = 50;
-
-    const diff = skipped ? null : (score - m.median);
-    const diffText = skipped ? '' : (diff >= 0 ? `+${Math.abs(diff).toFixed(1)}` : `-${Math.abs(diff).toFixed(1)}`);
-    const diffColor = skipped ? '' : (diff >= 0 ? '#22C55E' : '#EF4444');
-
+    const barW = skipped ? 0 : Math.min(pct, 99);
+    const diff = skipped ? null : score - m.median;
+    const diffText = diff === null ? '' : (diff >= 0 ? '+' : '') + Math.abs(diff).toFixed(1);
+    const diffColor = diff === null ? '' : diff >= 0 ? '#22C55E' : '#EF4444';
+    const exs = EXERCISES[m.id] || [];
     const showFix = !skipped && pct < 50;
+    const showGood = !skipped && pct >= 50;
+
+    let exerciseHTML = '';
+    if (showFix) {
+      exerciseHTML = exs.map(e => `
+        <div class="exercise-item">
+          <div class="exercise-name">${e.name}</div>
+          <div class="exercise-cue">"${e.cue}"</div>
+          <div class="exercise-sets">${e.sets}</div>
+        </div>`).join('');
+    }
 
     const card = document.createElement('div');
-    card.className = 'result-card' + (skipped ? ' skipped' : '');
+    card.className = 'result-card' + (skipped ? '" style="opacity:0.4' : '');
     card.innerHTML = `
       <div class="result-card-top">
         <div>
           <div class="result-metric-name">${m.name}</div>
-          <div class="result-scores">
+          <div style="display:flex;align-items:baseline;gap:6px">
             ${skipped
-              ? '<span style="color:#555;font-size:16px;">Not tested</span>'
-              : `<span class="result-your-score" style="color:${barColor}">${score}${m.unit ? ' ' + m.unit : ''}</span>`
-            }
+              ? '<span style="color:#555;font-size:16px">Not tested</span>'
+              : `<span class="result-your-score" style="color:${barColor}">${score}${m.unit ? ' '+m.unit : ''}</span>`}
           </div>
         </div>
         ${badge ? `<div class="result-badge ${badge.cls}">${badge.label}</div>` : ''}
       </div>
-
-      <div class="pct-bar-wrap">
-        <div class="pct-bar-track">
-          <div class="pct-bar-fill" style="width:${barWidth}%;background:${barColor}"></div>
-          <div class="pct-bar-median" style="left:${medianPos}%"></div>
-        </div>
-        <div class="pct-labels">
-          <span class="pct-label">0%ile</span>
-          <span class="pct-label mid">↑ Elite median</span>
-          <span class="pct-label">99%ile</span>
-        </div>
+      <div class="pct-bar-track">
+        <div class="pct-bar-fill" style="width:${barW}%;background:${barColor}"></div>
+        <div class="pct-bar-median" style="left:50%"></div>
       </div>
-
+      <div class="pct-labels">
+        <span class="pct-label">0%ile</span>
+        <span class="pct-label mid">↑ Elite median</span>
+        <span class="pct-label">99%ile</span>
+      </div>
       ${!skipped ? `
       <div class="vs-elite">
-        <span>vs elite median (${m.median}${m.unit ? ' ' + m.unit : ''}):</span>
+        <span>vs elite median (${m.median}${m.unit ? ' '+m.unit : ''}):</span>
         <strong style="color:${diffColor}">${diffText} ${m.unit}</strong>
         <span style="margin-left:auto;color:#555;font-size:12px">~${pct}th percentile</span>
       </div>` : ''}
-
-      ${showFix ? `
-      <div class="fix-box">
-        <div class="fix-label">How to close the gap</div>
-        <div class="fix-text">${m.fixBelow}</div>
-      </div>` : ''}
-
-      ${!skipped && pct >= 50 ? `
-      <div class="fix-box" style="border-color:#22C55E;background:rgba(34,197,94,0.05)">
-        <div class="fix-label" style="color:#22C55E">Maintaining elite status</div>
-        <div class="fix-text">${m.fixAbove}</div>
-      </div>` : ''}
+      ${showFix ? `<div class="fix-box"><div class="fix-label">Close the gap — start here</div>${exerciseHTML}</div>` : ''}
+      ${showGood ? `<div class="good-box"><div class="good-label">✓ Maintaining elite status</div><div class="good-text">${GOOD_ADVICE[m.id]}</div></div>` : ''}
     `;
     container.appendChild(card);
   });
 
   document.getElementById('progress-fill').style.width = '100%';
   goTo('screen-results');
+}
+
+// ═══ DM COPY ═══
+function copyDM() {
+  const text = document.getElementById('dm-trigger-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('copy-confirm').textContent = '✓ Copied! Now open Instagram and DM @coachcaliii';
+    setTimeout(() => { document.getElementById('copy-confirm').textContent = ''; }, 4000);
+  }).catch(() => {
+    document.getElementById('copy-confirm').textContent = 'Copy: ' + text;
+  });
+}
+
+// ═══ SHARE ═══
+function generateShare() {
+  const sport = BENCHMARKS[selectedSport];
+  const metrics = sport.metrics;
+  const labels = { aflm:'AFL Men', aflw:'AFLW', soccerm:'Premier League Men', soccerw:"Women's Soccer" };
+  let lines = ['🏆 My Elite Performance Benchmark — Coach Cali', ''];
+  lines.push('Sport: ' + labels[selectedSport]);
+  lines.push('');
+  metrics.forEach(m => {
+    if (userScores[m.id] !== undefined) {
+      const pct = getPctRank(userScores[m.id], m);
+      const bar = pct >= 75 ? '🟢' : pct >= 50 ? '🟡' : '🔴';
+      lines.push(bar + ' ' + m.name + ': ' + userScores[m.id] + (m.unit ? ' '+m.unit : '') + ' (~' + pct + '%ile vs elite)');
+    }
+  });
+  lines.push('');
+  lines.push('How do you rank? → coachcali.github.io/The-Performance-Benchmark');
+  lines.push('@coachcaliii');
+  const text = lines.join('\n');
+  const box = document.getElementById('share-text-box');
+  box.style.display = 'block';
+  box.textContent = text;
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      box.textContent = '✓ Copied to clipboard!\n\n' + text;
+    }).catch(() => {});
+  }
 }
 </script>
 </body>
