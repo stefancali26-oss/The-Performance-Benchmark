@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Elite Performance Benchmark — Coach Cali</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSE6QX20BG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RSE6QX20BG');
+</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -295,7 +303,7 @@
         <li>Instant digital download</li>
       </ul>
       <div class="upsell-price">$9 <span>one-time</span></div>
-      <a class="upsell-btn" href="https://coachcaliii.gumroad.com/l/eliteperformance" target="_blank">Get the Program →</a>
+      <a class="upsell-btn" href="https://gumroad.com/YOUR_PRODUCT_LINK" target="_blank">Get the Program →</a>
     </div>
 
     <!-- Share -->
@@ -396,6 +404,7 @@ function selectSport(sport) {
   document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('card-' + sport).classList.add('selected');
   document.getElementById('btn-start').disabled = false;
+  gtag('event', 'select_sport', { sport: sport });
 }
 
 function goToEmail() {
@@ -418,6 +427,7 @@ function goToMetrics() {
   const email = document.getElementById('input-email').value.trim();
   const sportText = document.getElementById('input-sport-text').value.trim();
   submitToMailchimp(email, userName, sportText);
+  gtag('event', 'email_submitted', { sport: selectedSport });
   currentMetricIndex = 0; userScores = {}; skippedMetrics = {};
   showMetric(0);
   goTo('screen-metric');
@@ -645,12 +655,14 @@ function showResults() {
   });
 
   document.getElementById('progress-fill').style.width = '100%';
+  gtag('event', 'results_viewed', { sport: selectedSport, overall_percentile: avg });
   goTo('screen-results');
 }
 
 // ═══ DM COPY ═══
 function copyDM() {
   const text = document.getElementById('dm-trigger-text').textContent;
+  gtag('event', 'dm_copied', { sport: selectedSport });
   navigator.clipboard.writeText(text).then(() => {
     document.getElementById('copy-confirm').textContent = '✓ Copied! Now open Instagram and DM @coachcaliii';
     setTimeout(() => { document.getElementById('copy-confirm').textContent = ''; }, 4000);
