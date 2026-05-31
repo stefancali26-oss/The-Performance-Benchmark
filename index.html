@@ -215,8 +215,30 @@
         <input type="email" id="input-email" placeholder="your@email.com" oninput="checkEmail()">
       </div>
       <div class="input-group">
-        <label>Sport / position (optional)</label>
+        <label>Age</label>
+        <input type="number" id="input-age" placeholder="Your age" min="12" max="60" oninput="checkEmail()">
+      </div>
+      <div class="input-group">
+        <label>Sport & position</label>
         <input type="text" id="input-sport-text" placeholder="e.g. AFL midfielder, soccer striker">
+      </div>
+      <div class="input-group">
+        <label>Training experience</label>
+        <select id="input-train-age" style="width:100%;background:var(--dark3);border:1.5px solid #333;border-radius:8px;padding:14px 16px;color:var(--white);font-size:15px;outline:none;appearance:none;">
+          <option value="" style="background:#1C1C1C">Select your training experience...</option>
+          <option value="beginner" style="background:#1C1C1C">Beginner — less than 1 year</option>
+          <option value="intermediate" style="background:#1C1C1C">Intermediate — 1 to 3 years</option>
+          <option value="advanced" style="background:#1C1C1C">Advanced — 3+ years</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Have you been VALD tested before?</label>
+        <select id="input-tested" style="width:100%;background:var(--dark3);border:1.5px solid #333;border-radius:8px;padding:14px 16px;color:var(--white);font-size:15px;outline:none;appearance:none;">
+          <option value="" style="background:#1C1C1C">Select...</option>
+          <option value="yes" style="background:#1C1C1C">Yes — I have VALD scores</option>
+          <option value="no" style="background:#1C1C1C">No — I want to get tested</option>
+          <option value="unsure" style="background:#1C1C1C">Not sure what VALD is</option>
+        </select>
       </div>
       <button class="btn-primary" id="btn-email" onclick="goToMetrics()" disabled style="margin-top:8px;">Get My Benchmark →</button>
       <p class="privacy">No spam. Used only to deliver your results and coaching content from Coach Cali. Unsubscribe anytime.</p>
@@ -390,7 +412,7 @@ const BENCHMARKS = {
 
 // ═══ STATE ═══
 let selectedSport = null, userName = '', currentMetricIndex = 0;
-let userScores = {}, skippedMetrics = {};
+let userScores = {}, skippedMetrics = {}, userAge = null;
 
 // ═══ NAV ═══
 function goTo(id) {
@@ -419,28 +441,46 @@ function goToEmail() {
 function checkEmail() {
   const n = document.getElementById('input-name').value.trim();
   const e = document.getElementById('input-email').value.trim();
-  document.getElementById('btn-email').disabled = !(n.length > 0 && e.includes('@') && e.includes('.'));
+  const a = document.getElementById('input-age').value.trim();
+  document.getElementById('btn-email').disabled = !(n.length > 0 && e.includes('@') && e.includes('.') && a.length > 0);
 }
 
 function goToMetrics() {
   userName = document.getElementById('input-name').value.trim();
   const email = document.getElementById('input-email').value.trim();
   const sportText = document.getElementById('input-sport-text').value.trim();
-  submitToMailchimp(email, userName, sportText);
-  gtag('event', 'email_submitted', { sport: selectedSport });
+  const age = document.getElementById('input-age').value.trim();
+  const trainAge = document.getElementById('input-train-age').value;
+  const tested = document.getElementById('input-tested').value;
+  userAge = parseInt(age) || null;
+  submitToMailchimp(email, userName, sportText, age, trainAge, tested);
+  gtag('event', 'email_submitted', { sport: selectedSport, age_group: getAgeGroup(userAge), train_exp: trainAge, vald_tested: tested });
   currentMetricIndex = 0; userScores = {}; skippedMetrics = {};
   showMetric(0);
   goTo('screen-metric');
 }
 
+function getAgeGroup(age) {
+  if (!age) return 'unknown';
+  if (age < 15) return 'under15';
+  if (age <= 17) return '15-17';
+  if (age <= 20) return '18-20';
+  if (age <= 30) return '21-30';
+  if (age <= 40) return '31-40';
+  return '40plus';
+}
+
 // ═══ MAILCHIMP ═══
-function submitToMailchimp(email, fname, sportText) {
+function submitToMailchimp(email, fname, sportText, age, trainAge, tested) {
   const action = 'https://coachcali.us21.list-manage.com/subscribe/post-json?u=9f956008f59f50c07a3e70f4d&id=4dfda44567&f_id=00fea1e6f0';
   const cb = 'mc_' + Date.now();
   const labels = { aflm:'AFL Men', aflw:'AFLW', soccerm:'Premier League Men', soccerw:"Women's Soccer" };
   const params = new URLSearchParams({
     EMAIL: email, FNAME: fname,
     SPORT: sportText || (labels[selectedSport] || ''),
+    AGE: age || '',
+    TRAINING: trainAge || '',
+    TESTED: tested || '',
     'b_9f956008f59f50c07a3e70f4d_4dfda44567': '',
     c: cb
   });
@@ -561,6 +601,10 @@ function showResults() {
 
   document.getElementById('result-sport-badge').innerHTML = sport.icon + ' ' + sport.label;
   document.getElementById('result-name-heading').textContent = (userName ? userName + "'s" : 'Your') + ' Elite Benchmark';
+
+  // Age context line
+  const ageCtx = userAge ? ` — Age ${userAge}` : '';
+  document.querySelector('#screen-results .results-header p').textContent = 'Here\'s exactly where you sit against elite athletes in your sport' + ageCtx + '.';
 
   // Set DM trigger
   document.getElementById('dm-trigger-text').textContent = 'TEST NOW - ' + labels[selectedSport];
