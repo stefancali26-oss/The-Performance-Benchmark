@@ -4,737 +4,854 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Elite Performance Benchmark — Coach Cali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-RSE6QX20BG"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
+  window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-RSE6QX20BG');
+  gtag('js',new Date());
+  gtag('config','G-RSE6QX20BG');
 </script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --orange: #E8580A; --orange-light: #FF6B2B;
-    --dark: #111111; --dark2: #1C1C1C; --dark3: #2A2A2A;
-    --grey: #888; --white: #ffffff;
-    --green: #22C55E; --amber: #F59E0B; --red: #EF4444;
-    --radius: 12px;
-  }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; overflow-x: hidden; }
-  .screen { display: none; min-height: 100vh; flex-direction: column; }
-  .screen.active { display: flex; }
-  .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid #222; }
-  .logo { font-size: 14px; font-weight: 700; color: var(--orange); letter-spacing: 0.05em; }
-  .logo span { color: var(--white); }
-  .back-btn { background: none; border: none; color: var(--grey); font-size: 13px; cursor: pointer; }
-  .back-btn:hover { color: var(--white); }
-  .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; text-align: center; max-width: 680px; margin: 0 auto; width: 100%; }
-  .tag { display: inline-block; background: rgba(232,88,10,0.15); color: var(--orange); border: 1px solid rgba(232,88,10,0.3); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 20px; }
-  h1 { font-size: clamp(26px, 5vw, 46px); font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
-  h1 .orange { color: var(--orange); }
-  .subtitle { font-size: 15px; color: #aaa; line-height: 1.6; max-width: 500px; margin: 0 auto 32px; }
-  .sport-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 560px; }
-  .sport-card { background: var(--dark2); border: 1.5px solid #2A2A2A; border-radius: var(--radius); padding: 20px 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
-  .sport-card:hover { border-color: var(--orange); transform: translateY(-2px); }
-  .sport-card.selected { border-color: var(--orange); background: rgba(232,88,10,0.1); }
-  .sport-icon { font-size: 28px; margin-bottom: 8px; }
-  .sport-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
-  .sport-sub { font-size: 11px; color: var(--grey); }
-  .btn-primary { background: var(--orange); color: var(--white); border: none; border-radius: 10px; padding: 16px 32px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; max-width: 420px; transition: all 0.2s; }
-  .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); }
-  .btn-primary:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
-  .gate-box { background: var(--dark2); border: 1px solid #2A2A2A; border-radius: 16px; padding: 32px 28px; max-width: 440px; width: 100%; margin: 0 auto; }
-  .gate-box h2 { font-size: 21px; margin-bottom: 8px; }
-  .gate-box p { font-size: 14px; color: #aaa; margin-bottom: 20px; line-height: 1.5; }
-  .input-group { margin-bottom: 12px; }
-  .input-group label { display: block; font-size: 12px; color: var(--grey); margin-bottom: 5px; font-weight: 600; }
-  .input-group input, .input-group select { width: 100%; background: var(--dark3); border: 1.5px solid #333; border-radius: 8px; padding: 13px 15px; color: var(--white); font-size: 14px; outline: none; transition: border-color 0.2s; appearance: none; }
-  .input-group input:focus, .input-group select:focus { border-color: var(--orange); }
-  .input-group input::placeholder { color: #555; }
-  .privacy { font-size: 11px; color: #555; text-align: center; margin-top: 12px; }
-  .sport-tag-display { display:none; background:rgba(232,88,10,0.1); border:1px solid rgba(232,88,10,0.2); border-radius:8px; padding:8px 14px; margin-bottom:12px; font-size:12px; color:var(--orange); font-weight:600; }
-  .progress-bar { height: 3px; background: #222; }
-  .progress-fill { height: 100%; background: var(--orange); transition: width 0.4s ease; }
-  .metric-screen { padding: 0; }
-  .metric-content { flex: 1; padding: 28px 22px; max-width: 560px; margin: 0 auto; width: 100%; }
-  .step-indicator { font-size: 12px; color: var(--grey); margin-bottom: 6px; font-weight: 600; }
-  .metric-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
-  .metric-desc { font-size: 13px; color: #aaa; line-height: 1.5; margin-bottom: 16px; }
-  .elite-callout { background: rgba(232,88,10,0.08); border: 1px solid rgba(232,88,10,0.2); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px; }
-  .elite-callout .elite-icon { font-size: 20px; margin-top: 1px; }
-  .elite-callout .elite-text { font-size: 13px; color: #ccc; line-height: 1.4; }
-  .elite-callout .elite-text strong { color: var(--orange); }
-  .method-selector { margin-bottom: 16px; }
-  .method-label { font-size: 12px; color: var(--grey); font-weight: 600; margin-bottom: 8px; }
-  .method-options { display: flex; gap: 8px; flex-wrap: wrap; }
-  .method-btn { background: var(--dark2); border: 1.5px solid #333; border-radius: 8px; padding: 8px 14px; font-size: 12px; color: #aaa; cursor: pointer; transition: all 0.2s; }
-  .method-btn.active { border-color: var(--orange); color: var(--orange); background: rgba(232,88,10,0.08); }
-  .method-note { font-size: 11px; color: #555; margin-top: 6px; font-style: italic; }
-  .calc-box { background: var(--dark2); border: 1px solid #333; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
-  .calc-title { font-size: 11px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
-  .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-  .calc-row input { background: var(--dark3); border: 1.5px solid #333; border-radius: 8px; padding: 11px 12px; color: var(--white); font-size: 15px; font-weight: 600; outline: none; text-align: center; }
-  .calc-row input:focus { border-color: var(--orange); }
-  .calc-result { text-align: center; font-size: 13px; color: #aaa; padding: 8px; background: var(--dark3); border-radius: 8px; }
-  .calc-result strong { color: var(--orange); font-size: 18px; }
-  .use-calc-btn { width: 100%; margin-top: 8px; background: rgba(232,88,10,0.15); color: var(--orange); border: 1px solid rgba(232,88,10,0.3); border-radius: 8px; padding: 9px; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .use-calc-btn:hover { background: rgba(232,88,10,0.25); }
-  .metric-input-wrap { position: relative; margin-bottom: 6px; }
-  .metric-input-wrap input { width: 100%; background: var(--dark2); border: 2px solid #333; border-radius: 12px; padding: 18px 70px 18px 18px; font-size: 30px; font-weight: 700; color: var(--white); outline: none; transition: border-color 0.2s; }
-  .metric-input-wrap input:focus { border-color: var(--orange); }
-  .metric-input-wrap .unit { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--grey); font-weight: 600; }
-  .input-hint { font-size: 12px; color: #555; margin-bottom: 14px; line-height: 1.4; }
-  .skip-link { text-align: center; margin-top: 12px; font-size: 13px; color: var(--grey); cursor: pointer; }
-  .skip-link:hover { color: var(--white); }
-  .results-content { flex: 1; padding: 22px; max-width: 640px; margin: 0 auto; width: 100%; }
-  .results-header { margin-bottom: 18px; }
-  .results-header h2 { font-size: 23px; font-weight: 800; margin-bottom: 4px; }
-  .results-header p { font-size: 13px; color: #aaa; }
-  .sport-badge-result { display: inline-flex; align-items: center; gap: 6px; background: rgba(232,88,10,0.12); border: 1px solid rgba(232,88,10,0.25); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--orange); font-weight: 700; margin-bottom: 14px; }
-  .overall-card { background: var(--dark2); border: 1.5px solid var(--orange); border-radius: 16px; padding: 22px; margin-bottom: 14px; text-align: center; }
-  .overall-label { font-size: 11px; color: var(--grey); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .overall-score { font-size: 50px; font-weight: 900; color: var(--orange); line-height: 1; margin-bottom: 4px; }
-  .overall-desc { font-size: 13px; color: #aaa; }
-  .result-card { background: var(--dark2); border: 1px solid #2A2A2A; border-radius: 14px; padding: 18px 20px; margin-bottom: 10px; }
-  .result-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-  .result-metric-name { font-size: 12px; color: var(--grey); font-weight: 600; margin-bottom: 3px; }
-  .result-your-score { font-size: 26px; font-weight: 800; }
-  .result-badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-  .badge-green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
-  .badge-amber { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
-  .badge-red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
-  .pct-bar-track { height: 7px; background: #2A2A2A; border-radius: 4px; position: relative; overflow: hidden; margin-bottom: 4px; }
-  .pct-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-  .pct-bar-median { position: absolute; top: -4px; width: 2px; height: 15px; background: var(--orange); border-radius: 1px; }
-  .pct-labels { display: flex; justify-content: space-between; margin-bottom: 8px; }
-  .pct-label { font-size: 10px; color: #555; }
-  .pct-label.mid { color: var(--orange); font-weight: 600; }
-  .vs-elite { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; color: #aaa; flex-wrap: wrap; }
-  .vs-elite strong { color: var(--white); }
-  .approx-badge { font-size: 10px; background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px; padding: 2px 8px; }
-  .fix-box { background: rgba(232,88,10,0.06); border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0; padding: 10px 12px; margin-top: 8px; }
-  .fix-label { font-size: 10px; color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .exercise-item { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid rgba(232,88,10,0.1); }
-  .exercise-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .exercise-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
-  .exercise-cue { font-size: 12px; color: #aaa; margin-bottom: 2px; font-style: italic; }
-  .exercise-sets { font-size: 12px; color: var(--orange); font-weight: 600; }
-  .good-box { background: rgba(34,197,94,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 10px 12px; margin-top: 8px; }
-  .good-label { font-size: 10px; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-  .good-text { font-size: 12px; color: #ccc; }
-  .dm-card { background: var(--dark2); border: 1.5px solid var(--orange); border-radius: 16px; padding: 22px; margin: 14px 0; text-align: center; }
-  .dm-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
-  .dm-card p { font-size: 13px; color: #aaa; margin-bottom: 14px; line-height: 1.5; }
-  .dm-trigger { background: var(--dark3); border: 1px solid #444; border-radius: 10px; padding: 12px 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-  .dm-trigger-text { font-size: 15px; font-weight: 800; color: var(--orange); }
-  .copy-btn { background: var(--orange); color: var(--white); border: none; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; cursor: pointer; }
-  .copy-confirm { font-size: 12px; color: var(--green); margin-top: 4px; height: 16px; }
-  .ig-btn { display: block; background: linear-gradient(135deg, #833AB4, #E1306C, #F77737); color: var(--white); border: none; border-radius: 10px; padding: 13px 24px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; text-decoration: none; margin-top: 8px; }
-  .upsell-card { background: linear-gradient(135deg, #1a1a1a, #222); border: 1px solid #333; border-radius: 16px; padding: 22px; margin: 10px 0; }
-  .upsell-tag { display: inline-block; background: rgba(232,88,10,0.15); color: var(--orange); border: 1px solid rgba(232,88,10,0.3); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
-  .upsell-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
-  .upsell-sub { font-size: 13px; color: #aaa; margin-bottom: 12px; line-height: 1.5; }
-  .upsell-features { list-style: none; margin-bottom: 14px; }
-  .upsell-features li { font-size: 13px; color: #ccc; padding: 3px 0; display: flex; align-items: center; gap: 8px; }
-  .upsell-features li::before { content: '✓'; color: var(--orange); font-weight: 700; }
-  .upsell-price { font-size: 26px; font-weight: 900; margin-bottom: 12px; }
-  .upsell-price span { font-size: 13px; color: #aaa; font-weight: 400; }
-  .upsell-btn { display: block; background: var(--orange); color: var(--white); border: none; border-radius: 10px; padding: 13px 24px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; text-decoration: none; }
-  .share-card { background: var(--dark2); border: 1px solid #2A2A2A; border-radius: 16px; padding: 18px 22px; margin: 10px 0; text-align: center; }
-  .share-card p { font-size: 13px; color: #aaa; margin-bottom: 12px; }
-  .share-btn { background: none; color: var(--white); border: 1.5px solid #444; border-radius: 10px; padding: 11px 18px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-  .share-btn:hover { border-color: var(--orange); color: var(--orange); }
-  .share-text-box { background: var(--dark3); border: 1px solid #333; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 12px; color: #ccc; line-height: 1.6; text-align: left; display: none; white-space: pre-wrap; }
-  .data-note { font-size: 11px; color: #333; text-align: center; padding: 14px 0 28px; }
-  .section-divider { height: 1px; background: #1C1C1C; margin: 6px 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --orange:#E8580A;--orange-light:#FF6B2B;--orange-dim:rgba(232,88,10,0.12);
+  --dark:#0D0D0D;--dark2:#161616;--dark3:#1E1E1E;--dark4:#262626;
+  --grey:#777;--grey2:#555;--white:#FFFFFF;
+  --green:#22C55E;--amber:#F59E0B;--red:#EF4444;
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden;}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* ── HEADER ── */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.06);
+  background:rgba(13,13,13,0.9);backdrop-filter:blur(10px);
+  position:sticky;top:0;z-index:50;
+}
+.logo{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;
+}
+.logo-c{color:var(--orange);}
+.logo-w{color:var(--white);}
+.back-btn{background:none;border:none;color:var(--grey);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.back-btn:hover{color:var(--white);}
+
+/* ── PROGRESS ── */
+.progress-wrap{height:3px;background:rgba(255,255,255,0.06);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.5s cubic-bezier(0.4,0,0.2,1);}
+
+/* ── LANDING ── */
+.landing-hero{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:32px 20px 40px;
+  max-width:580px;margin:0 auto;width:100%;
+}
+.landing-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--orange-dim);border:1px solid rgba(232,88,10,0.25);
+  color:var(--orange);font-size:11px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:6px 14px;border-radius:20px;margin-bottom:22px;
+}
+.landing-tag::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.landing-h1{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(38px,10vw,58px);font-weight:900;
+  line-height:0.95;text-transform:uppercase;letter-spacing:-0.01em;
+  text-align:center;margin-bottom:14px;
+}
+.landing-h1 .hl{color:var(--orange);}
+.landing-sub{font-size:14px;color:#888;line-height:1.6;text-align:center;max-width:420px;margin:0 auto 28px;}
+.sport-section-label{
+  font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--grey);margin-bottom:14px;text-align:center;
+}
+.sport-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  width:100%;max-width:520px;margin-bottom:24px;
+}
+.sport-card{
+  background:var(--dark2);border:1.5px solid var(--dark4);
+  border-radius:var(--radius);padding:18px 14px;
+  cursor:pointer;transition:all 0.18s;text-align:center;
+  position:relative;overflow:hidden;
+}
+.sport-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(232,88,10,0.05),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.sport-card:hover{border-color:rgba(232,88,10,0.5);transform:translateY(-2px);}
+.sport-card:hover::before{opacity:1;}
+.sport-card.selected{border-color:var(--orange);background:rgba(232,88,10,0.08);}
+.sport-card.selected::before{opacity:1;}
+.sport-emoji{font-size:26px;margin-bottom:8px;display:block;}
+.sport-name{font-size:13px;font-weight:700;margin-bottom:2px;color:var(--white);}
+.sport-sub{font-size:10px;color:var(--grey);letter-spacing:0.02em;}
+.btn-primary{
+  background:var(--orange);color:var(--white);border:none;
+  border-radius:var(--radius-sm);padding:16px 28px;
+  font-family:'Barlow',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;width:100%;max-width:420px;
+  transition:all 0.2s;letter-spacing:0.02em;
+}
+.btn-primary:hover{background:var(--orange-light);transform:translateY(-1px);}
+.btn-primary:disabled{background:var(--dark4);color:var(--grey2);cursor:not-allowed;transform:none;}
+.landing-note{font-size:11px;color:var(--grey2);margin-top:10px;text-align:center;}
+.trust-row{
+  display:flex;align-items:center;gap:16px;margin-bottom:24px;
+  flex-wrap:wrap;justify-content:center;
+}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--grey);}
+.trust-dot{width:4px;height:4px;background:var(--orange);border-radius:50%;}
+
+/* ── EMAIL GATE ── */
+.gate-wrap{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:24px 20px;
+}
+.gate-card{
+  background:var(--dark2);border:1px solid rgba(255,255,255,0.07);
+  border-radius:20px;padding:28px 24px;
+  max-width:420px;width:100%;
+}
+.gate-icon{font-size:28px;margin-bottom:14px;display:block;text-align:center;}
+.gate-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;text-align:center;margin-bottom:6px;}
+.gate-sub{font-size:13px;color:#888;text-align:center;margin-bottom:18px;line-height:1.5;}
+.sport-pill{
+  display:flex;align-items:center;gap:7px;
+  background:var(--orange-dim);border:1px solid rgba(232,88,10,0.2);
+  border-radius:8px;padding:8px 14px;margin-bottom:16px;
+  font-size:12px;color:var(--orange);font-weight:600;
+}
+.input-group{margin-bottom:10px;}
+.input-group label{display:block;font-size:11px;color:var(--grey);margin-bottom:5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;}
+.input-group input,.input-group select{
+  width:100%;background:var(--dark3);
+  border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:var(--radius-sm);padding:12px 14px;
+  color:var(--white);font-size:14px;font-family:'Barlow',sans-serif;
+  outline:none;transition:border-color 0.2s;appearance:none;
+}
+.input-group input:focus,.input-group select:focus{border-color:var(--orange);}
+.input-group input::placeholder{color:var(--grey2);}
+.privacy{font-size:11px;color:var(--grey2);text-align:center;margin-top:10px;line-height:1.5;}
+
+/* ── METRIC CARD ── */
+.metric-wrap{
+  flex:1;display:flex;flex-direction:column;
+  padding:0 0 24px;
+}
+.metric-card{
+  flex:1;
+  padding:24px 20px;
+  max-width:520px;margin:0 auto;width:100%;
+  animation:slideIn 0.3s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+.step-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.step-label{font-size:11px;color:var(--grey);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;}
+.step-count{
+  display:flex;align-items:center;gap:4px;
+}
+.step-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--dark4);transition:all 0.3s;
+}
+.step-dot.done{background:var(--orange);}
+.step-dot.active{background:var(--orange);box-shadow:0 0 6px rgba(232,88,10,0.6);width:18px;border-radius:4px;}
+.metric-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:28px;font-weight:900;text-transform:uppercase;
+  letter-spacing:0.01em;margin-bottom:8px;line-height:1.05;
+}
+.metric-desc{font-size:13px;color:#888;line-height:1.6;margin-bottom:16px;}
+.elite-box{
+  background:linear-gradient(135deg,rgba(232,88,10,0.1),rgba(232,88,10,0.04));
+  border:1px solid rgba(232,88,10,0.2);
+  border-radius:12px;padding:14px 16px;margin-bottom:16px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.elite-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.elite-text{font-size:13px;color:#ccc;line-height:1.5;}
+.elite-text strong{color:var(--orange);}
+.method-wrap{margin-bottom:14px;}
+.method-label{font-size:11px;color:var(--grey);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;}
+.method-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.method-pill{
+  background:var(--dark3);border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:20px;padding:7px 14px;font-size:12px;color:#888;
+  cursor:pointer;transition:all 0.2s;
+}
+.method-pill.active{border-color:var(--orange);color:var(--orange);background:rgba(232,88,10,0.08);}
+.method-note{font-size:11px;color:var(--grey2);margin-top:6px;font-style:italic;}
+.calc-box{
+  background:var(--dark3);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;padding:14px;margin-bottom:14px;
+}
+.calc-title{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.calc-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.calc-row input{
+  background:var(--dark4);border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:var(--radius-sm);padding:11px;color:var(--white);
+  font-size:16px;font-weight:700;outline:none;text-align:center;font-family:'Barlow',sans-serif;
+}
+.calc-row input:focus{border-color:var(--orange);}
+.calc-result{
+  text-align:center;font-size:13px;color:#888;
+  padding:8px;background:var(--dark4);border-radius:var(--radius-sm);
+}
+.calc-result strong{color:var(--orange);font-size:20px;}
+.use-calc-btn{
+  width:100%;margin-top:8px;
+  background:rgba(232,88,10,0.12);color:var(--orange);
+  border:1px solid rgba(232,88,10,0.25);border-radius:var(--radius-sm);
+  padding:9px;font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'Barlow',sans-serif;
+}
+.big-input-wrap{position:relative;margin-bottom:6px;}
+.big-input{
+  width:100%;background:var(--dark2);
+  border:2px solid rgba(255,255,255,0.1);border-radius:14px;
+  padding:20px 72px 20px 20px;font-size:36px;font-weight:700;
+  color:var(--white);outline:none;transition:border-color 0.2s;
+  font-family:'Barlow Condensed',sans-serif;
+}
+.big-input:focus{border-color:var(--orange);}
+.big-input-unit{
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  font-size:13px;color:var(--grey);font-weight:600;
+}
+.input-hint{font-size:12px;color:var(--grey2);margin-bottom:16px;line-height:1.5;}
+.metric-actions{display:flex;flex-direction:column;gap:8px;padding:0 20px;}
+.skip-btn{
+  background:none;border:none;color:var(--grey);
+  font-size:13px;cursor:pointer;padding:10px;text-align:center;font-family:'Barlow',sans-serif;
+}
+.skip-btn:hover{color:var(--white);}
+
+/* ── RESULTS ── */
+.results-wrap{flex:1;padding:0 0 40px;}
+.results-inner{max-width:600px;margin:0 auto;padding:24px 20px 0;}
+.results-sport-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--orange-dim);border:1px solid rgba(232,88,10,0.22);
+  border-radius:20px;padding:4px 12px;
+  font-size:11px;color:var(--orange);font-weight:700;
+  letter-spacing:0.04em;margin-bottom:12px;
+}
+.results-heading{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:30px;font-weight:900;text-transform:uppercase;
+  margin-bottom:4px;letter-spacing:0.01em;
+}
+.results-sub{font-size:13px;color:#888;margin-bottom:18px;}
+
+/* Overall score gauge */
+.gauge-card{
+  background:var(--dark2);border:1.5px solid var(--orange);
+  border-radius:18px;padding:24px 20px;margin-bottom:14px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.gauge-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:120px;height:120px;background:var(--orange);
+  border-radius:50%;opacity:0.06;
+}
+.gauge-label{font-size:10px;color:var(--grey);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;}
+.gauge-score{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:72px;font-weight:900;color:var(--orange);
+  line-height:1;margin-bottom:2px;
+}
+.gauge-bar-wrap{width:100%;height:8px;background:var(--dark4);border-radius:4px;margin:12px 0;position:relative;overflow:hidden;}
+.gauge-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--orange),var(--orange-light));transition:width 1.2s cubic-bezier(0.4,0,0.2,1);}
+.gauge-ticks{display:flex;justify-content:space-between;margin-bottom:4px;}
+.gauge-tick{font-size:9px;color:var(--grey2);}
+.gauge-desc{font-size:13px;color:#888;}
+
+/* Result cards */
+.result-card{
+  background:var(--dark2);border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;padding:18px 18px;margin-bottom:10px;
+  transition:border-color 0.2s;
+}
+.result-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.result-metric-name{font-size:11px;color:var(--grey);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.result-score{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:32px;font-weight:900;line-height:1;
+}
+.result-badge{
+  padding:5px 11px;border-radius:20px;
+  font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap;
+}
+.badge-green{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.25);}
+.badge-amber{background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.25);}
+.badge-red{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.25);}
+.pct-track{height:7px;background:var(--dark4);border-radius:4px;position:relative;overflow:hidden;margin-bottom:4px;}
+.pct-fill{height:100%;border-radius:4px;transition:width 0.9s ease;}
+.pct-marker{position:absolute;top:-5px;width:2px;height:17px;background:var(--orange);opacity:0.7;border-radius:1px;}
+.pct-labels{display:flex;justify-content:space-between;margin-bottom:8px;}
+.pct-lbl{font-size:10px;color:var(--grey2);}
+.pct-lbl.mid{color:rgba(232,88,10,0.7);font-weight:600;}
+.vs-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:#777;margin-bottom:8px;}
+.vs-row strong{color:var(--white);}
+.pct-num{margin-left:auto;font-size:11px;color:var(--grey2);}
+.approx-tag{font-size:10px;background:rgba(245,158,11,0.1);color:var(--amber);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:2px 7px;}
+.fix-box{background:rgba(232,88,10,0.05);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:12px 14px;margin-top:8px;}
+.fix-label{font-size:9px;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;}
+.ex-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(232,88,10,0.08);}
+.ex-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.ex-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;}
+.ex-cue{font-size:12px;color:#888;margin-bottom:3px;font-style:italic;}
+.ex-sets{font-size:12px;color:var(--orange);font-weight:600;}
+.good-box{background:rgba(34,197,94,0.04);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:10px 14px;margin-top:8px;}
+.good-label{font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
+.good-text{font-size:12px;color:#aaa;}
+
+/* Share card */
+.share-screenshot-card{
+  background:linear-gradient(135deg,var(--dark2),var(--dark3));
+  border:1.5px solid var(--orange);border-radius:18px;
+  padding:20px;margin-bottom:12px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.share-screenshot-card::before{
+  content:'📸 Screenshot this';
+  position:absolute;top:10px;right:12px;
+  font-size:10px;color:rgba(232,88,10,0.6);font-weight:600;
+  letter-spacing:0.06em;text-transform:uppercase;
+}
+.share-sport-label{font-size:11px;color:var(--orange);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+.share-name-heading{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;margin-bottom:4px;}
+.share-score-big{font-family:'Barlow Condensed',sans-serif;font-size:64px;font-weight:900;color:var(--orange);line-height:1;margin-bottom:2px;}
+.share-score-label{font-size:12px;color:#888;margin-bottom:14px;}
+.share-metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left;margin-bottom:10px;}
+.share-metric-item{background:var(--dark4);border-radius:8px;padding:8px 10px;}
+.share-metric-name{font-size:9px;color:var(--grey);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;}
+.share-metric-val{font-size:14px;font-weight:700;color:var(--white);}
+.share-metric-pct{font-size:10px;color:var(--orange);}
+.share-watermark{font-size:11px;color:rgba(232,88,10,0.5);font-weight:700;letter-spacing:0.08em;margin-top:10px;}
+
+/* CTA cards */
+.cta-book{
+  background:var(--dark2);border:1.5px solid var(--orange);
+  border-radius:18px;padding:20px;margin-bottom:12px;text-align:center;
+}
+.cta-book h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;margin-bottom:6px;}
+.cta-book p{font-size:13px;color:#888;margin-bottom:14px;line-height:1.5;}
+.dm-box{
+  background:var(--dark4);border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;padding:12px 16px;margin-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.dm-text{font-size:15px;font-weight:800;color:var(--orange);}
+.copy-btn{
+  background:var(--orange);color:var(--white);border:none;
+  border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:'Barlow',sans-serif;
+}
+.copy-confirm{font-size:12px;color:var(--green);height:16px;margin-top:4px;}
+.ig-btn{
+  display:block;background:linear-gradient(135deg,#833AB4,#E1306C,#F77737);
+  color:var(--white);border:none;border-radius:10px;padding:13px;
+  font-size:14px;font-weight:700;cursor:pointer;width:100%;
+  text-decoration:none;margin-top:8px;font-family:'Barlow',sans-serif;
+  text-align:center;
+}
+.upsell-card{
+  background:linear-gradient(135deg,var(--dark2),var(--dark3));
+  border:1px solid rgba(255,255,255,0.07);border-radius:18px;
+  padding:20px;margin-bottom:12px;
+}
+.upsell-tag{
+  display:inline-block;background:var(--orange-dim);color:var(--orange);
+  border:1px solid rgba(232,88,10,0.25);
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;
+  padding:3px 10px;border-radius:20px;margin-bottom:10px;
+}
+.upsell-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;margin-bottom:6px;}
+.upsell-sub{font-size:13px;color:#888;margin-bottom:12px;line-height:1.5;}
+.upsell-list{list-style:none;margin-bottom:14px;}
+.upsell-list li{font-size:13px;color:#aaa;padding:3px 0;display:flex;align-items:flex-start;gap:8px;}
+.upsell-list li::before{content:'✓';color:var(--orange);font-weight:700;flex-shrink:0;}
+.upsell-price{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;margin-bottom:12px;}
+.upsell-price span{font-size:13px;color:#888;font-weight:400;font-family:'Barlow',sans-serif;}
+.upsell-btn{
+  display:block;background:var(--orange);color:var(--white);
+  border:none;border-radius:10px;padding:13px;
+  font-size:14px;font-weight:700;cursor:pointer;width:100%;
+  text-align:center;text-decoration:none;font-family:'Barlow',sans-serif;
+}
+.coaching-btn{
+  display:block;background:transparent;color:var(--white);
+  border:1.5px solid rgba(255,255,255,0.15);border-radius:10px;padding:13px;
+  font-size:14px;font-weight:700;cursor:pointer;width:100%;
+  text-align:center;text-decoration:none;font-family:'Barlow',sans-serif;
+  margin-top:8px;transition:border-color 0.2s;
+}
+.coaching-btn:hover{border-color:var(--orange);color:var(--orange);}
+.share-card{background:var(--dark2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:18px;margin-bottom:12px;text-align:center;}
+.share-card p{font-size:13px;color:#888;margin-bottom:12px;}
+.share-btn{
+  background:none;color:var(--white);
+  border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;
+  padding:11px 18px;font-size:13px;font-weight:600;
+  cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Barlow',sans-serif;
+}
+.share-text-box{
+  background:var(--dark4);border:1px solid rgba(255,255,255,0.07);
+  border-radius:10px;padding:12px;margin-top:10px;
+  font-size:12px;color:#aaa;line-height:1.7;text-align:left;
+  display:none;white-space:pre-wrap;
+}
+.data-note{font-size:11px;color:#333;text-align:center;padding:16px 20px 32px;}
 </style>
 </head>
 <body>
 
-<!-- SCREEN 1: LANDING -->
+<!-- ════════════════════════════════════
+     SCREEN 1 — LANDING
+════════════════════════════════════ -->
 <div class="screen active" id="screen-landing">
-  <div class="header"><div class="logo">COACH <span>CALI</span></div></div>
-  <div class="hero">
-    <div class="tag">Performance Benchmarking</div>
-    <h1>The <span class="orange">Elite Performance</span> Benchmark</h1>
-    <p class="subtitle">Enter your scores. See exactly where you stand against professional athletes. Find out what it takes to close the gap.</p>
-    <p style="font-size:13px;color:#666;margin-bottom:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Select your sport</p>
+  <div class="header">
+    <div class="logo"><span class="logo-c">COACH</span> <span class="logo-w">CALI</span></div>
+  </div>
+  <div class="landing-hero">
+    <div class="landing-tag">Free · Takes 5 minutes</div>
+    <h1 class="landing-h1">The <span class="hl">Elite</span><br>Performance<br>Benchmark</h1>
+    <p class="landing-sub">Enter your scores. See exactly where you stand against professional athletes. Find out what it takes to close the gap.</p>
+    <div class="trust-row">
+      <div class="trust-item"><div class="trust-dot"></div>9 sports</div>
+      <div class="trust-item"><div class="trust-dot"></div>Elite normative data</div>
+      <div class="trust-item"><div class="trust-dot"></div>Instant results</div>
+    </div>
+    <div class="sport-section-label">Select your sport</div>
     <div class="sport-grid">
-      <div class="sport-card" onclick="selectSport('aflm')" id="card-aflm"><div class="sport-icon">🏉</div><div class="sport-name">AFL Men</div><div class="sport-sub">Elite AFL players</div></div>
-      <div class="sport-card" onclick="selectSport('aflw')" id="card-aflw"><div class="sport-icon">🏉</div><div class="sport-name">AFLW</div><div class="sport-sub">Elite AFLW players</div></div>
-      <div class="sport-card" onclick="selectSport('soccerm')" id="card-soccerm"><div class="sport-icon">⚽</div><div class="sport-name">Soccer — Men</div><div class="sport-sub">Premier League</div></div>
-      <div class="sport-card" onclick="selectSport('soccerw')" id="card-soccerw"><div class="sport-icon">⚽</div><div class="sport-name">Soccer — Women</div><div class="sport-sub">WSL &amp; elite programs</div></div>
-      <div class="sport-card" onclick="selectSport('netballw')" id="card-netballw"><div class="sport-icon">🏐</div><div class="sport-name">Netball — Women</div><div class="sport-sub">Super Netball / Diamonds</div></div>
-      <div class="sport-card" onclick="selectSport('basketballw')" id="card-basketballw"><div class="sport-icon">🏀</div><div class="sport-name">Basketball — Women</div><div class="sport-sub">NBL1 / elite level</div></div>
-      <div class="sport-card" onclick="selectSport('tennism')" id="card-tennism"><div class="sport-icon">🎾</div><div class="sport-name">Tennis — Men</div><div class="sport-sub">ATP elite</div></div>
-      <div class="sport-card" onclick="selectSport('tennisw')" id="card-tennisw"><div class="sport-icon">🎾</div><div class="sport-name">Tennis — Women</div><div class="sport-sub">WTA elite</div></div>
+      <div class="sport-card" onclick="selectSport('aflm')" id="card-aflm"><div class="sport-emoji">🏉</div><div class="sport-name">AFL Men</div><div class="sport-sub">Elite AFL players</div></div>
+      <div class="sport-card" onclick="selectSport('aflw')" id="card-aflw"><div class="sport-emoji">🏉</div><div class="sport-name">AFLW</div><div class="sport-sub">Elite AFLW players</div></div>
+      <div class="sport-card" onclick="selectSport('soccerm')" id="card-soccerm"><div class="sport-emoji">⚽</div><div class="sport-name">Soccer — Men</div><div class="sport-sub">Premier League</div></div>
+      <div class="sport-card" onclick="selectSport('soccerw')" id="card-soccerw"><div class="sport-emoji">⚽</div><div class="sport-name">Soccer — Women</div><div class="sport-sub">WSL &amp; elite programs</div></div>
+      <div class="sport-card" onclick="selectSport('netballw')" id="card-netballw"><div class="sport-emoji">🏐</div><div class="sport-name">Netball — Women</div><div class="sport-sub">Super Netball / Diamonds</div></div>
+      <div class="sport-card" onclick="selectSport('basketballm')" id="card-basketballm"><div class="sport-emoji">🏀</div><div class="sport-name">Basketball — Men</div><div class="sport-sub">NBL / elite level</div></div>
+      <div class="sport-card" onclick="selectSport('basketballw')" id="card-basketballw"><div class="sport-emoji">🏀</div><div class="sport-name">Basketball — Women</div><div class="sport-sub">NBL1 / elite level</div></div>
+      <div class="sport-card" onclick="selectSport('tennism')" id="card-tennism"><div class="sport-emoji">🎾</div><div class="sport-name">Tennis — Men</div><div class="sport-sub">ATP elite</div></div>
+      <div class="sport-card" onclick="selectSport('tennisw')" id="card-tennisw"><div class="sport-emoji">🎾</div><div class="sport-name">Tennis — Women</div><div class="sport-sub">WTA elite</div></div>
     </div>
-    <div style="margin-top:24px;width:100%;max-width:560px;">
-      <button class="btn-primary" id="btn-start" onclick="goToEmail()" disabled>See How You Compare →</button>
-    </div>
-    <p style="font-size:11px;color:#444;margin-top:12px;">No equipment needed for most tests — takes 5 minutes</p>
+    <button class="btn-primary" id="btn-start" onclick="goToEmail()" disabled>See How You Compare →</button>
+    <div class="landing-note">No equipment needed for most tests</div>
   </div>
 </div>
 
-<!-- SCREEN 2: EMAIL GATE -->
+<!-- ════════════════════════════════════
+     SCREEN 2 — EMAIL GATE
+════════════════════════════════════ -->
 <div class="screen" id="screen-email">
-  <div class="header"><div class="logo">COACH <span>CALI</span></div><button class="back-btn" onclick="goTo('screen-landing')">← Back</button></div>
-  <div class="hero">
-    <div class="gate-box">
-      <div style="font-size:30px;margin-bottom:10px;">📊</div>
-      <h2>Unlock Your Results</h2>
-      <p>Enter your details to see your personalised elite benchmark report and exactly what to train to close the gap.</p>
-      <div class="sport-tag-display" id="sport-tag-display"></div>
+  <div class="header">
+    <div class="logo"><span class="logo-c">COACH</span> <span class="logo-w">CALI</span></div>
+    <button class="back-btn" onclick="goTo('screen-landing')">← Back</button>
+  </div>
+  <div class="gate-wrap">
+    <div class="gate-card">
+      <span class="gate-icon">📊</span>
+      <div class="gate-title">Unlock Your Results</div>
+      <div class="gate-sub">Enter your details to get your personalised benchmark report.</div>
+      <div class="sport-pill" id="sport-pill" style="display:none">⚡ <span id="sport-pill-text"></span></div>
       <div class="input-group"><label>First name *</label><input type="text" id="input-name" placeholder="Your first name" oninput="checkEmail()"></div>
       <div class="input-group"><label>Email address *</label><input type="email" id="input-email" placeholder="your@email.com" oninput="checkEmail()"></div>
       <div class="input-group"><label>Age *</label><input type="number" id="input-age" placeholder="Your age" min="12" max="60" oninput="checkEmail()"></div>
       <div class="input-group"><label>Sport &amp; position</label><input type="text" id="input-sport-text" placeholder="e.g. AFL midfielder, soccer striker"></div>
       <div class="input-group"><label>Training experience</label>
         <select id="input-train-age">
-          <option value="" style="background:#1C1C1C">Select...</option>
-          <option value="beginner" style="background:#1C1C1C">Beginner — less than 1 year</option>
-          <option value="intermediate" style="background:#1C1C1C">Intermediate — 1 to 3 years</option>
-          <option value="advanced" style="background:#1C1C1C">Advanced — 3+ years</option>
+          <option value="" style="background:#1E1E1E">Select...</option>
+          <option value="beginner" style="background:#1E1E1E">Beginner — less than 1 year</option>
+          <option value="intermediate" style="background:#1E1E1E">Intermediate — 1 to 3 years</option>
+          <option value="advanced" style="background:#1E1E1E">Advanced — 3+ years</option>
         </select>
       </div>
-      <div class="input-group"><label>Have you been VALD tested before?</label>
+      <div class="input-group"><label>Have you been tested before?</label>
         <select id="input-tested">
-          <option value="" style="background:#1C1C1C">Select...</option>
-          <option value="yes" style="background:#1C1C1C">Yes — I have VALD scores</option>
-          <option value="no" style="background:#1C1C1C">No — I want to get tested</option>
-          <option value="unsure" style="background:#1C1C1C">Not sure what VALD is</option>
+          <option value="" style="background:#1E1E1E">Select...</option>
+          <option value="yes" style="background:#1E1E1E">Yes — I have force plate scores</option>
+          <option value="no" style="background:#1E1E1E">No — I want to get tested</option>
+          <option value="unsure" style="background:#1E1E1E">Not sure</option>
         </select>
       </div>
-      <button class="btn-primary" id="btn-email" onclick="goToMetrics()" disabled style="margin-top:10px;">Get My Benchmark →</button>
-      <p class="privacy">No spam. Used only to deliver your results and coaching content from Coach Cali. Unsubscribe anytime.</p>
+      <button class="btn-primary" id="btn-email" onclick="goToMetrics()" disabled style="margin-top:12px;">Get My Benchmark →</button>
+      <p class="privacy">No spam. Used only to deliver your results and coaching content. Unsubscribe anytime.</p>
     </div>
   </div>
 </div>
 
-<!-- SCREEN 3: METRICS -->
-<div class="screen metric-screen" id="screen-metric">
-  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-  <div class="header"><div class="logo">COACH <span>CALI</span></div><button class="back-btn" onclick="prevMetric()">← Back</button></div>
-  <div class="metric-content">
-    <div class="step-indicator" id="step-indicator"></div>
-    <div class="metric-title" id="metric-title"></div>
-    <div class="metric-desc" id="metric-desc"></div>
-    <div class="elite-callout"><div class="elite-icon">🏆</div><div class="elite-text" id="elite-callout-text"></div></div>
-    <div class="method-selector" id="method-selector" style="display:none">
-      <div class="method-label">How did you measure this?</div>
-      <div class="method-options" id="method-options"></div>
-      <div class="method-note" id="method-note"></div>
-    </div>
-    <div class="calc-box" id="bench-calc" style="display:none">
-      <div class="calc-title">⚡ Relative strength calculator</div>
-      <div class="calc-row">
-        <input type="number" id="calc-bw" placeholder="Body weight (kg)" oninput="calcBench()">
-        <input type="number" id="calc-1rm" placeholder="Bench 1RM (kg)" oninput="calcBench()">
+<!-- ════════════════════════════════════
+     SCREEN 3 — METRICS
+════════════════════════════════════ -->
+<div class="screen" id="screen-metric">
+  <div class="progress-wrap"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="header">
+    <div class="logo"><span class="logo-c">COACH</span> <span class="logo-w">CALI</span></div>
+    <button class="back-btn" onclick="prevMetric()">← Back</button>
+  </div>
+  <div class="metric-wrap">
+    <div class="metric-card" id="metric-card">
+      <div class="step-row">
+        <div class="step-label" id="step-label">Test 1 of 7</div>
+        <div class="step-count" id="step-dots"></div>
       </div>
-      <div class="calc-result" id="bench-result">Enter your body weight and 1RM above</div>
-      <button class="use-calc-btn" onclick="useBenchCalc()">Use this value →</button>
+      <div class="metric-title" id="metric-title"></div>
+      <div class="metric-desc" id="metric-desc"></div>
+      <div class="elite-box"><div class="elite-icon">🏆</div><div class="elite-text" id="elite-text"></div></div>
+      <div class="method-wrap" id="method-wrap" style="display:none">
+        <div class="method-label">How did you measure this?</div>
+        <div class="method-pills" id="method-pills"></div>
+        <div class="method-note" id="method-note"></div>
+      </div>
+      <div class="calc-box" id="bench-calc" style="display:none">
+        <div class="calc-title">⚡ Relative strength calculator</div>
+        <div class="calc-row">
+          <input type="number" id="calc-bw" placeholder="Body weight (kg)" oninput="calcBench()">
+          <input type="number" id="calc-1rm" placeholder="Bench 1RM (kg)" oninput="calcBench()">
+        </div>
+        <div class="calc-result" id="bench-result">Enter body weight and 1RM above</div>
+        <button class="use-calc-btn" onclick="useBenchCalc()">Use this value →</button>
+      </div>
+      <div class="big-input-wrap">
+        <input class="big-input" type="number" id="metric-input" placeholder="0" oninput="onMetricInput()" step="0.01">
+        <div class="big-input-unit" id="metric-unit"></div>
+      </div>
+      <div class="input-hint" id="input-hint"></div>
     </div>
-    <div class="metric-input-wrap">
-      <input type="number" id="metric-input" placeholder="0" oninput="onMetricInput()" step="0.01">
-      <div class="unit" id="metric-unit"></div>
+    <div class="metric-actions">
+      <button class="btn-primary" id="btn-next" onclick="nextMetric()" disabled>Next →</button>
+      <button class="skip-btn" onclick="skipMetric()">Skip — I don't have this score</button>
     </div>
-    <div class="input-hint" id="input-hint"></div>
-    <button class="btn-primary" id="btn-metric-next" onclick="nextMetric()" disabled>Next →</button>
-    <div class="skip-link" onclick="skipMetric()">Skip — I don't have this score</div>
   </div>
 </div>
 
-<!-- SCREEN 4: RESULTS -->
+<!-- ════════════════════════════════════
+     SCREEN 4 — RESULTS
+════════════════════════════════════ -->
 <div class="screen" id="screen-results">
-  <div class="header"><div class="logo">COACH <span>CALI</span></div></div>
-  <div class="results-content">
-    <div class="results-header">
-      <div class="sport-badge-result" id="result-sport-badge"></div>
-      <h2 id="result-name-heading"></h2>
-      <p id="result-subheading">Here's exactly where you sit against elite athletes in your sport.</p>
-    </div>
-    <div class="overall-card">
-      <div class="overall-label">Your overall performance rating</div>
-      <div class="overall-score" id="overall-score"></div>
-      <div class="overall-desc" id="overall-desc"></div>
-    </div>
-    <div id="result-cards"></div>
-    <div class="dm-card">
-      <h3>Ready to get tested for real?</h3>
-      <p>DM Coach Cali on Instagram with the message below to lock in your VALD testing session — the same tech used by every Premier League and AFL club.</p>
-      <div class="dm-trigger">
-        <div class="dm-trigger-text" id="dm-trigger-text"></div>
-        <button class="copy-btn" onclick="copyDM()">Copy</button>
+  <div class="progress-wrap"><div class="progress-fill" style="width:100%;background:var(--orange);"></div></div>
+  <div class="header">
+    <div class="logo"><span class="logo-c">COACH</span> <span class="logo-w">CALI</span></div>
+  </div>
+  <div class="results-wrap">
+    <div class="results-inner">
+      <div class="results-sport-badge" id="result-sport-badge"></div>
+      <div class="results-heading" id="result-heading"></div>
+      <div class="results-sub" id="result-sub"></div>
+
+      <!-- Screenshot share card at top -->
+      <div class="share-screenshot-card" id="share-screenshot-card">
+        <div class="share-sport-label" id="share-sport-label"></div>
+        <div class="share-name-heading" id="share-name-heading"></div>
+        <div class="share-score-big" id="share-score-big"></div>
+        <div class="share-score-label">Overall performance percentile vs elite athletes</div>
+        <div class="share-metrics-grid" id="share-metrics-grid"></div>
+        <div class="share-watermark">COACH CALI · coachcali.com.au</div>
       </div>
-      <div class="copy-confirm" id="copy-confirm"></div>
-      <a class="ig-btn" href="https://www.instagram.com/coachcaliii" target="_blank">📲 Open Instagram → @coachcaliii</a>
+
+      <!-- Overall gauge -->
+      <div class="gauge-card">
+        <div class="gauge-label">Your overall performance rating</div>
+        <div class="gauge-score" id="gauge-score"></div>
+        <div class="gauge-ticks">
+          <span class="gauge-tick">0</span>
+          <span class="gauge-tick">25th</span>
+          <span class="gauge-tick">50th</span>
+          <span class="gauge-tick">75th</span>
+          <span class="gauge-tick">99th</span>
+        </div>
+        <div class="gauge-bar-wrap"><div class="gauge-bar-fill" id="gauge-bar"></div></div>
+        <div class="gauge-desc" id="gauge-desc"></div>
+      </div>
+
+      <!-- Individual result cards -->
+      <div id="result-cards"></div>
+
+      <!-- Book a session CTA -->
+      <div class="cta-book">
+        <h3>Ready to get tested?</h3>
+        <p>DM Coach Cali on Instagram to lock in a performance testing session in Adelaide — or ask about online coaching anywhere in Australia.</p>
+        <div class="dm-box">
+          <div class="dm-text" id="dm-text"></div>
+          <button class="copy-btn" onclick="copyDM()">Copy</button>
+        </div>
+        <div class="copy-confirm" id="copy-confirm"></div>
+        <a class="ig-btn" href="https://www.instagram.com/coachcaliii" target="_blank">📲 Open Instagram → @coachcaliii</a>
+        <a class="coaching-btn" href="https://form.jotform.com/261518742904056" target="_blank">Apply for Online Coaching →</a>
+      </div>
+
+      <!-- Upsell -->
+      <div class="upsell-card">
+        <div class="upsell-tag">Limited offer</div>
+        <div class="upsell-title">The 6-Week Elite Performance Program</div>
+        <div class="upsell-sub">A structured training program targeting the exact metrics in your benchmark. Close the gap — works year round, any sport.</div>
+        <ul class="upsell-list">
+          <li>6 weeks of structured programming</li>
+          <li>Targets CMJ, hamstring strength &amp; reactive power</li>
+          <li>Works alongside your existing sport training</li>
+          <li>Instant digital download</li>
+        </ul>
+        <div class="upsell-price">$9 <span>one-time</span></div>
+        <a class="upsell-btn" href="https://coachcaliii.gumroad.com/l/eliteperformance" target="_blank">Get the Program →</a>
+      </div>
+
+      <!-- Share -->
+      <div class="share-card">
+        <p>Show your teammates where you rank 👊</p>
+        <button class="share-btn" onclick="generateShare()">📤 Share my result</button>
+        <div class="share-text-box" id="share-text-box"></div>
+      </div>
+
+      <p class="data-note">Elite benchmarks sourced from normative data compiled from peer-reviewed sports science literature and published elite athlete testing programs.</p>
     </div>
-    <div class="upsell-card">
-      <div class="upsell-tag">Limited offer</div>
-      <div class="upsell-title">The 6-Week Elite Performance Program</div>
-      <div class="upsell-sub">A generalised training program built around the exact metrics tested here. Close the gap between where you are and where the pros train — works year round, any sport.</div>
-      <ul class="upsell-features">
-        <li>6 weeks of structured programming</li>
-        <li>Targets CMJ, Nordic strength &amp; reactive power</li>
-        <li>Works alongside your existing sport training</li>
-        <li>Instant digital download</li>
-      </ul>
-      <div class="upsell-price">$9 <span>one-time</span></div>
-      <a class="upsell-btn" href="https://coachcaliii.gumroad.com/l/eliteperformance" target="_blank">Get the Program →</a>
-    </div>
-    <div class="share-card">
-      <p>Show your teammates where you rank 👊</p>
-      <button class="share-btn" onclick="generateShare()">📤 Share my result</button>
-      <div class="share-text-box" id="share-text-box"></div>
-    </div>
-    <p class="data-note">Elite benchmarks sourced from VALD Hub normative database 2024/25, peer-reviewed sports science literature, and published meta-analyses.</p>
   </div>
 </div>
 
 <script>
-// ═══════════════ EXERCISE DATA ═══════════════
+// ════════════════════════════════════
+// EXERCISE DATA
+// ════════════════════════════════════
 const EXERCISES = {
-  cmj: [
-    { name:'Countermovement Jump with pause', cue:'Pause 2 seconds at the bottom before exploding up — forces force production from a dead stop.', sets:'4 sets × 5 reps — 90 sec rest' },
-    { name:'Box Jump (step down)', cue:'Jump onto a box, always step down. Focus on maximum height and soft landing mechanics. Reset fully between reps.', sets:'4 sets × 4 reps — 2 min rest' },
-    { name:'Loaded Jump Squat (20-30% BW)', cue:'Quick dip and explode upward holding light load. Speed of movement is the priority, not the weight.', sets:'3 sets × 6 reps — 90 sec rest' }
+  cmj:[
+    {name:'Countermovement Jump with pause',cue:'Pause 2 seconds at the bottom before exploding up — forces force production from a dead stop.',sets:'4 sets × 5 reps — 90 sec rest'},
+    {name:'Box Jump (step down)',cue:'Jump onto a box, always step down. Focus on maximum height and soft landing mechanics.',sets:'4 sets × 4 reps — 2 min rest'},
+    {name:'Loaded Jump Squat (20-30% BW)',cue:'Quick dip and explode upward. Speed of movement is the priority, not the weight.',sets:'3 sets × 6 reps — 90 sec rest'}
   ],
-  broad: [
-    { name:'Broad Jump with approach step', cue:'Short approach, two-foot takeoff, jump as far forward as possible. Measure from takeoff line to heel landing.', sets:'4 sets × 4 reps — 90 sec rest' },
-    { name:'Single-leg Broad Jump (left then right)', cue:'Compare distances between legs. More than 10% asymmetry signals a training imbalance to address.', sets:'3 sets × 4 reps each — 90 sec rest' },
-    { name:'Continuous Broad Jumps', cue:'Jump forward, land and immediately jump again. Minimise ground contact. Cover max distance in min time.', sets:'3 sets × 6 jumps — 90 sec rest' }
+  broad:[
+    {name:'Broad Jump with approach step',cue:'Short approach, two-foot takeoff, jump as far forward as possible. Measure from takeoff line to heel landing.',sets:'4 sets × 4 reps — 90 sec rest'},
+    {name:'Single-leg Broad Jump',cue:'Compare distances between legs. More than 10% asymmetry signals a training imbalance.',sets:'3 sets × 4 reps each — 90 sec rest'},
+    {name:'Continuous Broad Jumps',cue:'Jump forward, land and immediately jump again. Minimise ground contact.',sets:'3 sets × 6 jumps — 90 sec rest'}
   ],
-  nordic: [
-    { name:'Nordic Hamstring Curl', cue:'Anchor feet, lower as slowly as possible (3-5 sec down), use hands to return. Slow reps build more strength.', sets:'3 sets × 4-6 reps — 2 min rest' },
-    { name:'Romanian Deadlift (RDL)', cue:'Push hips back, bar stays close to legs. Deep hamstring stretch at the bottom. Control the descent.', sets:'4 sets × 8 reps — 90 sec rest' },
-    { name:'Single-Leg RDL (bodyweight or light load)', cue:'Hinge forward keeping hips square. Build the weaker side — this is your injury prevention exercise.', sets:'3 sets × 10 reps each — 60 sec rest' }
+  nordic:[
+    {name:'Nordic Hamstring Curl',cue:'Anchor feet, lower as slowly as possible (3-5 sec down), use hands to return.',sets:'3 sets × 4-6 reps — 2 min rest'},
+    {name:'Romanian Deadlift (RDL)',cue:'Push hips back, bar stays close to legs. Deep hamstring stretch at the bottom.',sets:'4 sets × 8 reps — 90 sec rest'},
+    {name:'Single-Leg RDL',cue:'Hinge forward keeping hips square. Build the weaker side — injury prevention first.',sets:'3 sets × 10 reps each — 60 sec rest'}
   ],
-  rsi: [
-    { name:'Pogo Jumps', cue:'Stay on your toes, minimise ground contact. Think of the floor as hot — get off it fast. Body tall and rigid.', sets:'4 sets × 15 seconds — 60 sec rest' },
-    { name:'Depth Drop to Jump', cue:'Step off a low box (20-30cm), land and immediately jump as high as possible. Land and takeoff = one movement.', sets:'4 sets × 5 reps — 2 min rest' },
-    { name:'Continuous Broad Jumps', cue:'Jump forward, land and immediately jump again. Minimise ground contact. Max distance, minimum time.', sets:'3 sets × 6 jumps — 90 sec rest' }
+  rsi:[
+    {name:'Pogo Jumps',cue:'Stay on your toes, minimise ground contact. Think of the floor as hot.',sets:'4 sets × 15 seconds — 60 sec rest'},
+    {name:'Depth Drop to Jump',cue:'Step off a low box (20-30cm), land and immediately jump as high as possible.',sets:'4 sets × 5 reps — 2 min rest'},
+    {name:'Continuous Broad Jumps',cue:'Jump forward, land and immediately jump again. Max distance, minimum time.',sets:'3 sets × 6 jumps — 90 sec rest'}
   ],
-  bench: [
-    { name:'Barbell Bench Press (70-80% 1RM)', cue:'Retract shoulder blades, drive feet into floor. 3-second descent, press explosively. Control is the training.', sets:'4 sets × 6 reps — 2 min rest' },
-    { name:'Weighted Push-Up or DB Press', cue:'Full range — chest to floor, full lockout. Build the movement before adding load.', sets:'3 sets × 10 reps — 90 sec rest' },
-    { name:'Incline DB Press', cue:'Bench at 30 degrees. DBs touch outside of chest at bottom. Builds upper chest and shoulder stability.', sets:'3 sets × 10 reps — 90 sec rest' }
+  bench:[
+    {name:'Barbell Bench Press (70-80% 1RM)',cue:'Retract shoulder blades, drive feet into floor. 3-second descent, press explosively.',sets:'4 sets × 6 reps — 2 min rest'},
+    {name:'Weighted Push-Up or DB Press',cue:'Full range — chest to floor, full lockout. Build the movement before adding load.',sets:'3 sets × 10 reps — 90 sec rest'},
+    {name:'Incline DB Press',cue:'Bench at 30 degrees. Builds upper chest and shoulder stability.',sets:'3 sets × 10 reps — 90 sec rest'}
   ],
-  pushups: [
-    { name:'Tempo Push-Ups (3-1-1)', cue:'3 seconds down, 1 second pause at bottom, explode up. Builds the strength base that transfers to max reps.', sets:'4 sets × 8-12 reps — 60 sec rest' },
-    { name:'Weighted Push-Ups', cue:'Add a plate or weight vest. Progressive overload is what drives strength gains — not just more reps.', sets:'3 sets × 8-10 reps — 90 sec rest' },
-    { name:'Pike Push-Ups', cue:'Hips high, lower head toward floor. Builds shoulder strength that transfers to pressing endurance.', sets:'3 sets × 10 reps — 60 sec rest' }
+  pushups:[
+    {name:'Tempo Push-Ups (3-1-1)',cue:'3 seconds down, 1 second pause at bottom, explode up.',sets:'4 sets × 8-12 reps — 60 sec rest'},
+    {name:'Weighted Push-Ups',cue:'Add a plate or weight vest. Progressive overload drives strength gains.',sets:'3 sets × 8-10 reps — 90 sec rest'},
+    {name:'Pike Push-Ups',cue:'Hips high, lower head toward floor. Builds shoulder pressing endurance.',sets:'3 sets × 10 reps — 60 sec rest'}
   ],
-  pullups: [
-    { name:'Assisted Pull-Ups or Negatives', cue:'Jump to the top and lower yourself as slowly as possible (5 seconds). This builds pulling strength fast.', sets:'4 sets × 4-6 reps — 2 min rest' },
-    { name:'Dead Hang (time)', cue:'Hang from the bar with straight arms as long as possible. Builds grip and shoulder stability for pulling.', sets:'3 sets × max time — 90 sec rest' },
-    { name:'Scapular Pull-Ups', cue:'Hang from bar, depress and retract shoulder blades without bending elbows. Activates the correct muscles for full pull-ups.', sets:'3 sets × 10 reps — 60 sec rest' }
+  pullups:[
+    {name:'Assisted Pull-Ups or Negatives',cue:'Jump to the top and lower yourself as slowly as possible (5 seconds).',sets:'4 sets × 4-6 reps — 2 min rest'},
+    {name:'Dead Hang (timed)',cue:'Hang from the bar with straight arms as long as possible.',sets:'3 sets × max time — 90 sec rest'},
+    {name:'Scapular Pull-Ups',cue:'Depress and retract shoulder blades without bending elbows.',sets:'3 sets × 10 reps — 60 sec rest'}
   ],
-  sprint: [
-    { name:'Flying 10m Sprints', cue:'5m build-up, then sprint flat out for 10m. Develops top-end speed mechanics. Quality over quantity.', sets:'6 reps — 3 min rest between each' },
-    { name:'Resisted Sprint (sled or band)', cue:'Light resistance — should slow your time by no more than 10%. Builds drive phase mechanics and acceleration power.', sets:'4 reps × 20m — 3 min rest' },
-    { name:'Sprint Countdown (5-4-3-2-1)', cue:'Sprint 5 seconds, rest, sprint 4 seconds, rest — down to 1. Builds speed endurance without killing your mechanics.', sets:'1 set of the full countdown — 2 min rest between reps' }
+  sprint:[
+    {name:'Flying 10m Sprints',cue:'5m build-up, then sprint flat out for 10m. Quality over quantity.',sets:'6 reps — 3 min rest between each'},
+    {name:'Resisted Sprint (sled or band)',cue:'Light resistance — slow your time by no more than 10%.',sets:'4 reps × 20m — 3 min rest'},
+    {name:'Sprint Countdown (5-4-3-2-1)',cue:'Sprint 5 seconds, rest, sprint 4 seconds — down to 1.',sets:'1 full countdown — 2 min between reps'}
   ],
-  // ── NEW SPORT EXERCISES ──
-  vertical: [
-    { name:'Approach Jump (3-step)', cue:'3-step run-up into a two-foot jump. This is how you jump in netball — practice the approach, not just the static take-off.', sets:'4 sets × 5 reps — 90 sec rest' },
-    { name:'Single-Leg Takeoff Jump', cue:'Run 2-3 steps, take off from one foot. Land softly. Alternating legs — your weaker leg needs more attention.', sets:'3 sets × 6 reps each leg — 90 sec rest' },
-    { name:'Hurdle Hops (double leg)', cue:'Line up 4-5 small hurdles. Jump over each with minimal ground contact. Reactive, not slow. Get off the ground fast.', sets:'4 sets × 5 hurdles — 90 sec rest' }
+  vertical:[
+    {name:'Approach Jump (3-step)',cue:'3-step run-up into a two-foot jump. Practice the approach, not just static take-off.',sets:'4 sets × 5 reps — 90 sec rest'},
+    {name:'Single-Leg Takeoff Jump',cue:'Run 2-3 steps, take off from one foot. Land softly. Your weaker leg needs more work.',sets:'3 sets × 6 reps each leg — 90 sec rest'},
+    {name:'Hurdle Hops (double leg)',cue:'Line up 4-5 small hurdles. Jump over each with minimal ground contact.',sets:'4 sets × 5 hurdles — 90 sec rest'}
   ],
-  change_dir: [
-    { name:'T-Drill', cue:'Set 4 cones in a T-shape. Sprint forward, shuffle left, shuffle right, shuffle back to middle, sprint back. Time every rep.', sets:'6 reps — 90 sec rest' },
-    { name:'Reactive Shuffle Drill', cue:'Partner points left or right randomly. Shuffle immediately on signal. Trains reactive agility — not just programmed movement.', sets:'4 sets × 20 seconds — 60 sec rest' },
-    { name:'Zigzag Sprint', cue:'Place 6 cones in a zigzag pattern 2m apart. Sprint through touching each cone. Deceleration before each plant foot is the key skill.', sets:'6 reps — 90 sec rest' }
+  change_dir:[
+    {name:'T-Drill',cue:'Set 4 cones in a T-shape. Sprint forward, shuffle left, right, back. Time every rep.',sets:'6 reps — 90 sec rest'},
+    {name:'Reactive Shuffle Drill',cue:'Partner points left or right randomly. Shuffle immediately on signal.',sets:'4 sets × 20 seconds — 60 sec rest'},
+    {name:'Zigzag Sprint',cue:'6 cones in zigzag pattern 2m apart. Deceleration before each plant foot is key.',sets:'6 reps — 90 sec rest'}
   ],
-  hip_add: [
-    { name:'Side-Lying Hip Adduction', cue:'Lie on your side, top leg resting on a box or bench. Lift the bottom leg up toward the top. Slow and controlled — feel the inner thigh working.', sets:'3 sets × 15 reps each side — 60 sec rest' },
-    { name:'Copenhagen Adduction', cue:'Top foot on bench, bottom leg free. Lower your hip toward the floor, hold, then return. Progressively load as it gets easier.', sets:'3 sets × 8-10 reps each side — 90 sec rest' },
-    { name:'Cable Hip Adduction', cue:'Attach ankle cuff, stand sideways. Pull the working leg across the body. Control the return — the eccentric phase is where the strength is built.', sets:'3 sets × 12 reps each side — 60 sec rest' }
+  hip_add:[
+    {name:'Side-Lying Hip Adduction',cue:'Lie on your side, lift the bottom leg toward the top. Slow and controlled.',sets:'3 sets × 15 reps each side — 60 sec rest'},
+    {name:'Copenhagen Adduction',cue:'Top foot on bench, bottom leg free. Lower hip toward floor, hold, return.',sets:'3 sets × 8-10 reps each side — 90 sec rest'},
+    {name:'Cable Hip Adduction',cue:'Pull working leg across the body. Control the return — eccentric builds the strength.',sets:'3 sets × 12 reps each side — 60 sec rest'}
   ],
-  hip_abd: [
-    { name:'Side-Lying Hip Abduction', cue:'Lie on your side, lift the top leg toward the ceiling. Keep toes pointing slightly down. Squeeze at the top, lower slowly.', sets:'3 sets × 15 reps each side — 60 sec rest' },
-    { name:'Banded Lateral Walk', cue:'Band just above knees, half-squat position. Step sideways maintaining tension. Knees track over toes the entire time — no caving.', sets:'3 sets × 20 steps each direction — 60 sec rest' },
-    { name:'Single-Leg Glute Bridge', cue:'One foot on floor, drive hips up. Squeeze glute at top — feel the abductor firing on the standing side. Hold 2 seconds at peak.', sets:'3 sets × 12 reps each side — 60 sec rest' }
+  hip_abd:[
+    {name:'Side-Lying Hip Abduction',cue:'Lift the top leg toward the ceiling. Squeeze at top, lower slowly.',sets:'3 sets × 15 reps each side — 60 sec rest'},
+    {name:'Banded Lateral Walk',cue:'Band above knees, half-squat. Step sideways maintaining tension. Knees track over toes.',sets:'3 sets × 20 steps each direction — 60 sec rest'},
+    {name:'Single-Leg Glute Bridge',cue:'One foot on floor, drive hips up. Squeeze at top, hold 2 seconds.',sets:'3 sets × 12 reps each side — 60 sec rest'}
   ],
-  spider_run: [
-    { name:'L-Drill / 3-Cone Drill', cue:'Set up 3 cones in an L-shape (5 yards apart). Sprint, change direction, sprint back. Time yourself — this is your agility benchmark.', sets:'6 reps — 90 sec rest between each' },
-    { name:'Lateral Shuffle + Acceleration', cue:'Shuffle laterally 3m, then explode into a sprint. The transition from lateral to linear is where matches are won.', sets:'4 sets × 6 reps each direction — 90 sec rest' },
-    { name:'Pro-Agility (5-10-5) Drill', cue:'5 yards left, 10 yards right, 5 yards back through start. Change of direction speed. Time from a 3-point stance for accuracy.', sets:'6 reps — 90 sec rest' }
+  spider_run:[
+    {name:'L-Drill / 3-Cone Drill',cue:'3 cones in L-shape (5 yards apart). Sprint, change direction, sprint back.',sets:'6 reps — 90 sec rest'},
+    {name:'Lateral Shuffle + Acceleration',cue:'Shuffle 3m laterally, then explode into a sprint. Transition is where matches are won.',sets:'4 sets × 6 reps each direction — 90 sec rest'},
+    {name:'Pro-Agility (5-10-5)',cue:'5 yards left, 10 right, 5 back. Time from 3-point stance.',sets:'6 reps — 90 sec rest'}
   ],
-  grip: [
-    { name:'Dead Hang (timed)', cue:'Hang from a pull-up bar with straight arms as long as possible. Alternate overhand and underhand grips across sets. This is your foundation.', sets:'4 sets × max time — 90 sec rest' },
-    { name:"Farmer's Carry (heavy)", cue:'Pick up heavy dumbbells or kettlebells, walk 20-30m. Grip fails before anything else — let it. That is the point. Heavy and slow.', sets:'4 sets × 30m — 90 sec rest' },
-    { name:'Plate Pinch (2.5-5kg)', cue:'Pinch a weight plate between thumb and fingers. Hold as long as possible, both hands. Direct thumb strength training for racket sports.', sets:'3 sets × max time each hand — 60 sec rest' }
+  grip:[
+    {name:'Dead Hang (timed)',cue:'Hang from pull-up bar with straight arms as long as possible.',sets:'4 sets × max time — 90 sec rest'},
+    {name:"Farmer's Carry (heavy)",cue:'Heavy dumbbells, walk 20-30m. Grip fails first — let it. That is the point.',sets:'4 sets × 30m — 90 sec rest'},
+    {name:'Plate Pinch',cue:'Pinch a weight plate between thumb and fingers. Hold as long as possible.',sets:'3 sets × max time each hand — 60 sec rest'}
   ]
 };
 
 const GOOD_ADVICE = {
-  cmj: 'Your jump height is at or above elite standard. Shift focus to power quality — FT:CT and eccentric deceleration rather than chasing height.',
-  broad: 'Strong horizontal power. Maintain with plyometric work and focus on single-leg symmetry to ensure balanced force output.',
-  nordic: 'Excellent hamstring output. Maintain with weekly eccentric loading (1-2 sessions) and monitor limb symmetry. Any asymmetry above 10% needs addressing.',
-  rsi: 'Elite reactive strength. Use your RSI as a weekly readiness marker — a drop of more than 10% signals to reduce load that day.',
-  bench: 'Your relative pressing strength meets elite standards. Maintain with moderate volume and focus on power expression through velocity-based training.',
-  pushups: 'Strong push-up endurance. Progress to weighted variations and focus on speed of movement to build explosive pressing power.',
-  pullups: 'Excellent pulling strength. Develop further with weighted pull-ups and single-arm progressions to build elite upper body athleticism.',
-  sprint: 'Your speed is at or above standard for your sport. Maintain with weekly max-effort sprint work and focus on acceleration mechanics.',
-  vertical: 'Your vertical jump meets elite standards. Maintain with plyometric training and focus on approach jump mechanics and landing control.',
-  change_dir: 'Your agility is at elite level. Focus on reactive agility — responding to unpredictable cues — rather than programmed drills.',
-  hip_add: 'Strong hip adduction meets elite standards — a key ACL and groin injury prevention marker. Maintain with 1-2 sessions weekly and monitor limb symmetry.',
-  hip_abd: 'Hip abduction at elite level. This is your lateral stability base. Maintain and keep checking for left-right imbalance — aim to stay within 10%.',
-  spider_run: 'Your agility is at elite standard for your sport. Maintain with weekly change-of-direction work and focus on reactive drills.',
-  grip: 'Strong grip for your sport standard. Maintain with farmer carries and dead hangs. Progress to single-arm variations to ensure no limb asymmetry.'
+  cmj:'Your jump height is at or above elite standard. Shift focus to power quality — FT:CT and eccentric deceleration rather than chasing height.',
+  broad:'Strong horizontal power. Maintain with plyometric work and focus on single-leg symmetry.',
+  nordic:'Excellent hamstring output. Maintain with weekly eccentric loading and monitor limb symmetry. Any asymmetry above 10% needs addressing.',
+  rsi:'Elite reactive strength. Use RSI as a weekly readiness marker — a drop of more than 10% signals to reduce load that day.',
+  bench:'Relative pressing strength meets elite standards. Maintain and focus on power expression through velocity-based training.',
+  pushups:'Strong push-up endurance. Progress to weighted variations and focus on speed of movement.',
+  pullups:'Excellent pulling strength. Develop further with weighted pull-ups and single-arm progressions.',
+  sprint:'Your speed is at or above standard. Maintain with weekly max-effort sprint work and focus on acceleration mechanics.',
+  vertical:'Your vertical jump meets elite standards. Maintain with plyometric training and focus on approach jump mechanics.',
+  change_dir:'Your agility is at elite level. Focus on reactive agility — responding to unpredictable cues.',
+  hip_add:'Strong hip adduction — a key ACL and groin injury prevention marker. Monitor limb symmetry weekly.',
+  hip_abd:'Hip abduction at elite level. Maintain and check for left-right imbalance — stay within 10%.',
+  spider_run:'Your agility is at elite standard. Maintain with weekly change-of-direction work.',
+  grip:'Strong grip for your sport standard. Progress to single-arm variations to ensure no asymmetry.'
 };
 
-// ═══════════════ BENCHMARKS ═══════════════
+// ════════════════════════════════════
+// BENCHMARKS
+// ════════════════════════════════════
 const BENCHMARKS = {
-  aflm: {
-    label:'AFL Men', icon:'🏉',
+  aflm:{
+    label:'AFL Men',icon:'🏉',
     metrics:[
-      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'Stand on two legs, dip and jump as high as you can. The gold standard measure of lower body explosive power used by every elite AFL club.', eliteText:'The average elite AFL player jumps <strong>40 cm</strong>. Top 25% clear <strong>43 cm</strong>.', hint:'Best measured with ForceDecks or My Jump 2 app (free). Can also estimate from a standing jump against a wall.', median:40, p25:35, p75:43, p99:53, showCalc:false, showMethod:true, methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'], methodNotes:['Exact result','Good estimate — enable slow-mo camera','Approximate — compare carefully'] },
-      { id:'broad', name:'Standing Broad Jump', unit:'cm', desc:'Stand behind a line, jump forward as far as possible off two feet, land and hold. Measure from the line to your back heel. No equipment needed.', eliteText:'Elite AFL players average <strong>230-250 cm</strong> on the broad jump. Top performers exceed <strong>260 cm</strong>.', hint:'Mark a line with tape, jump, measure to back heel with a tape measure. Anyone can do this anywhere.', median:240, p25:220, p75:255, p99:275, showCalc:false, showMethod:false },
-      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'Eccentric hamstring strength — the #1 injury risk screening tool in elite sport. If you haven\'t been tested, skip this and DM for a session.', eliteText:'The average elite AFL player produces <strong>421 N</strong> of Nordic force. Limb imbalance should be under <strong>7%</strong>.', hint:'Requires a NordBord or VALD testing session. Skip if you haven\'t been tested — this is the #1 reason to book.', median:421, p25:366, p75:470, p99:600, showCalc:false, showMethod:false },
-      { id:'sprint', name:'30m Sprint Time', unit:'sec', desc:'Sprint flat out over 30 metres. Have a friend time you or use a phone timer. Lower time = faster = better.', eliteText:'Elite AFL players average <strong>4.0-4.2 seconds</strong> for 30m. Top-end speed performers run under <strong>3.9 sec</strong>.', hint:'Mark 30m on a flat surface. Standing start. Time from first movement to crossing the line. Best of 2 attempts.', median:4.1, p25:3.9, p75:4.3, p99:4.6, showCalc:false, showMethod:false, lowerIsBetter:true },
-      { id:'bench', name:'Bench Press', unit:'× BW', desc:'Upper body push strength relative to your bodyweight. Use the calculator. If you don\'t have gym access, use the push-up test instead.', eliteText:'Elite AFL players average <strong>1.2–1.4× bodyweight</strong>. The benchmark is <strong>1.3× BW</strong> for most positions.', hint:'Use the calculator above. No gym? Skip this and complete the push-up test below.', median:1.3, p25:1.1, p75:1.5, p99:1.9, showCalc:true, showMethod:false },
-      { id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps', desc:'How many full push-ups can you complete in 60 seconds? Chest to floor, full lockout each rep. No rest during the 60 seconds.', eliteText:'Elite AFL athletes typically complete <strong>45-60 push-ups</strong> in 60 seconds. Top performers exceed <strong>65 reps</strong>.', hint:'Set a timer for 60 seconds. Count only full reps — chest touches floor, arms fully extend. No cheating!', median:50, p25:40, p75:60, p99:70, showCalc:false, showMethod:false },
-      { id:'pullups', name:'Max Pull-Ups', unit:'reps', desc:'How many strict pull-ups can you complete? Dead hang start, chin over bar counts. No kipping or swinging.', eliteText:'Elite AFL athletes average <strong>12-16 strict pull-ups</strong>. Top performers reach <strong>20+</strong>.', hint:'Find a bar. Dead hang start. Pull until chin clears the bar. Count until failure. Strict form only.', median:14, p25:10, p75:18, p99:24, showCalc:false, showMethod:false }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'Stand on two legs, dip and jump as high as you can. The gold standard measure of lower body explosive power used by every elite AFL club.',eliteText:'The average elite AFL player jumps <strong>40 cm</strong>. Top 25% clear <strong>43 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app (free). Can estimate from a wall touch jump.',median:40,p25:35,p75:43,p99:53,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate — enable slow-mo','Approximate — compare carefully']},
+      {id:'broad',name:'Standing Broad Jump',unit:'cm',desc:'Jump forward as far as possible off two feet. Measure from line to back heel. No equipment needed.',eliteText:'Elite AFL players average <strong>230-250 cm</strong>. Top performers exceed <strong>260 cm</strong>.',hint:'Tape line on floor. Jump, hold landing, measure to back heel.',median:240,p25:220,p75:255,p99:275,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Eccentric hamstring strength — the #1 injury risk screening tool in elite sport.',eliteText:'The average elite AFL player produces <strong>421 N</strong>. Limb imbalance should be under <strong>7%</strong>.',hint:'Requires a NordBord or performance testing session. Skip if untested.',median:421,p25:366,p75:470,p99:600,showCalc:false,showMethod:false},
+      {id:'sprint',name:'30m Sprint Time',unit:'sec',desc:'Sprint flat out over 30 metres. Lower time = faster = better.',eliteText:'Elite AFL players average <strong>4.0-4.2 sec</strong>. Top performers run under <strong>3.9 sec</strong>.',hint:'Mark 30m. Standing start. Time from first movement. Best of 2.',median:4.1,p25:3.9,p75:4.3,p99:4.6,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'bench',name:'Bench Press',unit:'× BW',desc:'Upper body push strength relative to bodyweight. Use the calculator.',eliteText:'Elite AFL players average <strong>1.2–1.4× bodyweight</strong>. Benchmark is <strong>1.3× BW</strong> for most positions.',hint:'Use the calculator above. No gym? Skip and do the push-up test.',median:1.3,p25:1.1,p75:1.5,p99:1.9,showCalc:true,showMethod:false},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Full push-ups in 60 seconds. Chest to floor, full lockout each rep.',eliteText:'Elite AFL athletes typically complete <strong>45-60 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full reps only — chest to floor, arms fully extend.',median:50,p25:40,p75:60,p99:70,showCalc:false,showMethod:false},
+      {id:'pullups',name:'Max Pull-Ups',unit:'reps',desc:'Strict pull-ups — dead hang start, chin over bar. No kipping.',eliteText:'Elite AFL athletes average <strong>12-16 strict pull-ups</strong>. Top performers reach <strong>20+</strong>.',hint:'Dead hang start. Count until failure. Strict form only.',median:14,p25:10,p75:18,p99:24,showCalc:false,showMethod:false}
     ]
   },
-  aflw: {
-    label:'AFLW', icon:'🏉',
+  aflw:{
+    label:'AFLW',icon:'🏉',
     metrics:[
-      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'Stand on two legs, dip and jump as high as you can. The gold standard measure of lower body explosive power.', eliteText:'The average elite AFLW player jumps <strong>32 cm</strong>. Top 25% clear <strong>35 cm</strong>.', hint:'Best measured with ForceDecks or My Jump 2 app (free).', median:32, p25:28, p75:35, p99:43, showCalc:false, showMethod:true, methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'], methodNotes:['Exact result','Good estimate','Approximate'] },
-      { id:'broad', name:'Standing Broad Jump', unit:'cm', desc:'Jump forward as far as possible off two feet, measure from takeoff line to back heel landing. No equipment needed.', eliteText:'Elite AFLW players average <strong>185-205 cm</strong> on the broad jump.', hint:'Tape on the floor, tape measure. Anyone can do this anywhere.', median:195, p25:180, p75:210, p99:230, showCalc:false, showMethod:false },
-      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'Eccentric hamstring strength — especially critical in women\'s sport where hamstring and ACL injury rates are higher.', eliteText:'The average elite AFLW player produces <strong>302 N</strong>. Limb imbalance should be under <strong>7%</strong>.', hint:'Requires a NordBord or VALD testing session. Skip if untested.', median:302, p25:264, p75:332, p99:421, showCalc:false, showMethod:false },
-      { id:'sprint', name:'30m Sprint Time', unit:'sec', desc:'Sprint flat out over 30 metres. Lower time = faster = better.', eliteText:'Elite AFLW players average <strong>4.3-4.6 seconds</strong> for 30m.', hint:'Standing start. Time from first movement to crossing the line. Best of 2 attempts.', median:4.45, p25:4.2, p75:4.7, p99:5.0, showCalc:false, showMethod:false, lowerIsBetter:true },
-      { id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps', desc:'Full push-ups in 60 seconds. Chest to floor, full lockout each rep.', eliteText:'Elite AFLW athletes typically complete <strong>25-40 push-ups</strong> in 60 seconds.', hint:'Set a timer for 60 seconds. Full reps only — chest touches floor each time.', median:32, p25:22, p75:42, p99:55, showCalc:false, showMethod:false },
-      { id:'pullups', name:'Max Pull-Ups', unit:'reps', desc:'Strict pull-ups — dead hang start, chin over bar. No kipping.', eliteText:'Elite AFLW athletes average <strong>5-10 strict pull-ups</strong>. Top performers reach <strong>12+</strong>.', hint:'Dead hang start. Count only reps where chin clears the bar with strict form.', median:7, p25:4, p75:11, p99:16, showCalc:false, showMethod:false }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'Stand on two legs, dip and jump as high as you can.',eliteText:'The average elite AFLW player jumps <strong>32 cm</strong>. Top 25% clear <strong>35 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app.',median:32,p25:28,p75:35,p99:43,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate','Approximate']},
+      {id:'broad',name:'Standing Broad Jump',unit:'cm',desc:'Jump forward off two feet. Measure from line to back heel.',eliteText:'Elite AFLW players average <strong>185-205 cm</strong> on the broad jump.',hint:'Tape on the floor, tape measure. Anyone can do this anywhere.',median:195,p25:180,p75:210,p99:230,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Eccentric hamstring strength — critical in women\'s sport where ACL injury rates are higher.',eliteText:'The average elite AFLW player produces <strong>302 N</strong>. Limb imbalance under <strong>7%</strong>.',hint:'Requires a testing session. Skip if untested.',median:302,p25:264,p75:332,p99:421,showCalc:false,showMethod:false},
+      {id:'sprint',name:'30m Sprint Time',unit:'sec',desc:'Sprint flat out over 30 metres. Lower = faster = better.',eliteText:'Elite AFLW players average <strong>4.3-4.6 sec</strong> for 30m.',hint:'Standing start. Time from first movement. Best of 2 attempts.',median:4.45,p25:4.2,p75:4.7,p99:5.0,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Full push-ups in 60 seconds.',eliteText:'Elite AFLW athletes typically complete <strong>25-40 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full reps only.',median:32,p25:22,p75:42,p99:55,showCalc:false,showMethod:false},
+      {id:'pullups',name:'Max Pull-Ups',unit:'reps',desc:'Strict pull-ups — dead hang start, chin over bar.',eliteText:'Elite AFLW athletes average <strong>5-10 strict pull-ups</strong>. Top performers reach <strong>12+</strong>.',hint:'Dead hang start. Strict form only.',median:7,p25:4,p75:11,p99:16,showCalc:false,showMethod:false}
     ]
   },
-  soccerm: {
-    label:'Premier League Men', icon:'⚽',
+  soccerm:{
+    label:'Premier League Men',icon:'⚽',
     metrics:[
-      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'The most widely used measure of lower body power in professional football — 33,606 tests in the Premier League in 2024/25 alone.', eliteText:'The average Premier League player jumps <strong>39 cm</strong>. Top 25% clear <strong>43 cm</strong>. Data from 1,793 elite male players.', hint:'Best measured with ForceDecks or My Jump 2 app. Can estimate from wall touch.', median:39, p25:35, p75:43, p99:48, showCalc:false, showMethod:true, methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'], methodNotes:['Exact result','Good estimate','Approximate'] },
-      { id:'broad', name:'Standing Broad Jump', unit:'cm', desc:'Jump forward off two feet, measure from line to back heel. A great proxy for horizontal explosive power — no equipment needed.', eliteText:'Elite soccer players average <strong>220-240 cm</strong> on the broad jump.', hint:'Tape on the floor, tape measure. Can be done anywhere.', median:230, p25:210, p75:248, p99:265, showCalc:false, showMethod:false },
-      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'The gold standard hamstring injury screening tool. Hamstring injury is the #1 injury in professional football.', eliteText:'The average Premier League player produces <strong>435 N</strong>. Consistent across all professional English leagues.', hint:'Requires a NordBord. If untested, skip — this is the #1 reason to book a session.', median:435, p25:380, p75:488, p99:582, showCalc:false, showMethod:false },
-      { id:'sprint', name:'30m Sprint Time', unit:'sec', desc:'Sprint flat out over 30 metres. Standing start. Lower time = faster.', eliteText:'Elite Premier League players average <strong>3.9-4.1 seconds</strong> for 30m. Top-end pace under <strong>3.8 sec</strong>.', hint:'Flat surface, standing start, timed by a friend or phone. Best of 2 attempts after a proper warm-up.', median:4.0, p25:3.8, p75:4.2, p99:4.5, showCalc:false, showMethod:false, lowerIsBetter:true },
-      { id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps', desc:'Full push-ups in 60 seconds. A proxy for upper body strength endurance when gym testing isn\'t available.', eliteText:'Elite footballers typically complete <strong>40-55 push-ups</strong> in 60 seconds.', hint:'60 second timer. Chest touches floor every rep. Full arm extension counts.', median:48, p25:38, p75:58, p99:68, showCalc:false, showMethod:false },
-      { id:'bench', name:'Bench Press', unit:'× BW', desc:'Relative upper body push strength. Use the calculator below. If no gym access, the push-up test above is your alternative.', eliteText:'Elite footballers who bench <strong>1.0–1.3× bodyweight</strong> are considered strong for the sport.', hint:'Enter body weight and 1RM in the calculator above.', median:1.1, p25:0.9, p75:1.3, p99:1.6, showCalc:true, showMethod:false }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'Most widely used measure of lower body power in professional football.',eliteText:'The average Premier League player jumps <strong>39 cm</strong>. Top 25% clear <strong>43 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app.',median:39,p25:35,p75:43,p99:48,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate','Approximate']},
+      {id:'broad',name:'Standing Broad Jump',unit:'cm',desc:'Jump forward off two feet. No equipment needed.',eliteText:'Elite soccer players average <strong>220-240 cm</strong> on the broad jump.',hint:'Tape on the floor, tape measure.',median:230,p25:210,p75:248,p99:265,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Hamstring injury is the #1 injury in professional football.',eliteText:'The average Premier League player produces <strong>435 N</strong>.',hint:'Requires a testing session. Skip if untested.',median:435,p25:380,p75:488,p99:582,showCalc:false,showMethod:false},
+      {id:'sprint',name:'30m Sprint Time',unit:'sec',desc:'Sprint flat out over 30 metres.',eliteText:'Elite Premier League players average <strong>3.9-4.1 sec</strong>. Top pace under <strong>3.8 sec</strong>.',hint:'Flat surface, standing start, timed. Best of 2 after warm-up.',median:4.0,p25:3.8,p75:4.2,p99:4.5,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Full push-ups in 60 seconds.',eliteText:'Elite footballers typically complete <strong>40-55 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full reps.',median:48,p25:38,p75:58,p99:68,showCalc:false,showMethod:false},
+      {id:'bench',name:'Bench Press',unit:'× BW',desc:'Relative upper body push strength.',eliteText:'Elite footballers who bench <strong>1.0–1.3× bodyweight</strong> are considered strong for the sport.',hint:'Use the calculator above.',median:1.1,p25:0.9,p75:1.3,p99:1.6,showCalc:true,showMethod:false}
     ]
   },
-  soccerw: {
-    label:"Women's Soccer", icon:'⚽',
+  soccerw:{
+    label:"Women's Soccer",icon:'⚽',
     metrics:[
-      { id:'cmj', name:'CMJ Jump Height', unit:'cm', desc:'The most widely used measure of explosive power in professional football.', eliteText:'The average elite women\'s soccer player jumps <strong>29 cm</strong>. Peak age (20-30) averages <strong>31 cm</strong>.', hint:'Best measured with ForceDecks or My Jump 2 app.', median:29, p25:25, p75:33, p99:38, showCalc:false, showMethod:true, methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'], methodNotes:['Exact result','Good estimate','Approximate'] },
-      { id:'broad', name:'Standing Broad Jump', unit:'cm', desc:'Jump forward off two feet as far as possible. Measure from line to back heel. No equipment needed.', eliteText:'Elite women\'s soccer players average <strong>175-195 cm</strong> on the broad jump.', hint:'Tape on floor, tape measure. Anyone can do this anywhere.', median:185, p25:170, p75:200, p99:218, showCalc:false, showMethod:false },
-      { id:'nordic', name:'Nordic Hamstring Force', unit:'N', desc:'Critical for injury prevention. ACL and hamstring injury rates are significantly higher in women\'s football.', eliteText:'The average elite women\'s soccer player produces <strong>276 N</strong>. Peak age (20-30) averages <strong>301 N</strong>.', hint:'Requires a NordBord. If untested, skip and DM to book a session.', median:276, p25:227, p75:319, p99:418, showCalc:false, showMethod:false },
-      { id:'sprint', name:'30m Sprint Time', unit:'sec', desc:'Sprint flat out over 30 metres. Standing start. Lower = faster = better.', eliteText:'Elite women\'s soccer players average <strong>4.4-4.7 seconds</strong> for 30m.', hint:'Flat surface, standing start, timed from first movement. Best of 2 attempts.', median:4.55, p25:4.3, p75:4.8, p99:5.1, showCalc:false, showMethod:false, lowerIsBetter:true },
-      { id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps', desc:'Full push-ups in 60 seconds. Chest to floor, full lockout each rep.', eliteText:'Elite female footballers typically complete <strong>22-35 push-ups</strong> in 60 seconds.', hint:'60 second timer. Full reps only.', median:28, p25:18, p75:38, p99:50, showCalc:false, showMethod:false },
-      { id:'pullups', name:'Max Pull-Ups', unit:'reps', desc:'Strict pull-ups — dead hang start, chin over bar. No kipping or swinging.', eliteText:'Elite female footballers average <strong>4-8 strict pull-ups</strong>. Top performers reach <strong>10+</strong>.', hint:'Dead hang start. Chin over bar = 1 rep. Strict form only.', median:6, p25:3, p75:9, p99:13, showCalc:false, showMethod:false }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'Most widely used measure of explosive power in professional football.',eliteText:'The average elite women\'s soccer player jumps <strong>29 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app.',median:29,p25:25,p75:33,p99:38,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate','Approximate']},
+      {id:'broad',name:'Standing Broad Jump',unit:'cm',desc:'Jump forward off two feet. No equipment needed.',eliteText:'Elite women\'s soccer players average <strong>175-195 cm</strong> on the broad jump.',hint:'Tape on floor, tape measure.',median:185,p25:170,p75:200,p99:218,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'ACL and hamstring injury rates are significantly higher in women\'s football.',eliteText:'The average elite women\'s soccer player produces <strong>276 N</strong>.',hint:'Requires a testing session. Skip if untested.',median:276,p25:227,p75:319,p99:418,showCalc:false,showMethod:false},
+      {id:'sprint',name:'30m Sprint Time',unit:'sec',desc:'Sprint flat out over 30 metres.',eliteText:'Elite women\'s soccer players average <strong>4.4-4.7 sec</strong> for 30m.',hint:'Flat surface, standing start. Best of 2 attempts.',median:4.55,p25:4.3,p75:4.8,p99:5.1,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Full push-ups in 60 seconds.',eliteText:'Elite female footballers typically complete <strong>22-35 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full reps only.',median:28,p25:18,p75:38,p99:50,showCalc:false,showMethod:false},
+      {id:'pullups',name:'Max Pull-Ups',unit:'reps',desc:'Strict pull-ups — dead hang start, chin over bar.',eliteText:'Elite female footballers average <strong>4-8 strict pull-ups</strong>.',hint:'Dead hang start. Chin over bar = 1 rep.',median:6,p25:3,p75:9,p99:13,showCalc:false,showMethod:false}
     ]
   },
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // NETBALL WOMEN — Super Netball / Diamonds
-  // Sources: published Super Netball & ANZ Championship literature,
-  //          VALD Hub women's court sport norms
-  // ─────────────────────────────────────────────────────────────────────────
-  netballw: {
-    label:'Super Netball / Diamonds', icon:'🏐',
+  netballw:{
+    label:'Super Netball / Diamonds',icon:'🏐',
     metrics:[
-      {
-        id:'cmj', name:'CMJ Jump Height', unit:'cm',
-        desc:'The primary explosive power measure in elite netball. Critical for goal circle contests, intercepts and centre-pass contests.',
-        eliteText:'VALD Hub netball data: elite female netballers average <strong>32 cm</strong>. Top 25% clear <strong>35 cm</strong>. Top 1% reach <strong>46 cm</strong>. Modified RSI median is <strong>47.2</strong> — a key secondary marker measured in a ForceDecks session.',
-        hint:'Best measured with ForceDecks or My Jump 2 app (free). Can estimate from a wall touch jump.',
-        median:32, p25:28, p75:35, p99:46,
-        showCalc:false, showMethod:true,
-        methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'],
-        methodNotes:['Exact result — matches VALD Hub netball data','Good estimate — enable slow-mo camera','Approximate — compare carefully']
-      },
-      {
-        id:'vertical', name:'Standing Vertical Jump', unit:'cm',
-        desc:'Static vertical jump from two feet — no run-up. Measures pure lower body power and is a key predictor of contest performance in netball.',
-        eliteText:'Elite netballers average <strong>42-48 cm</strong> on a standing vertical jump. Post players typically score higher due to contest demands.',
-        hint:'Stand beside a wall. Reach as high as possible (standing reach). Jump and touch the wall. Subtract standing reach from jump reach for your score.',
-        median:45, p25:40, p75:50, p99:60,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'nordic', name:'Nordic Hamstring Force', unit:'N',
-        desc:'Eccentric hamstring strength — essential injury prevention in a high-cutting, high-jump-landing sport. ACL and hamstring injury rates are high in netball.',
-        eliteText:'VALD Hub netball data: elite female netballers average <strong>314 N</strong> of Nordic force. Top 25% produce <strong>340 N</strong>. Limb imbalance should be under <strong>10%</strong> — median imbalance is 8.3%.',
-        hint:'Requires a NordBord or VALD testing session. Skip if untested — DM Coach Cali to book.',
-        median:314, p25:287, p75:340, p99:422,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'change_dir', name:'505 Agility Test', unit:'sec',
-        desc:'Sprint 15m, plant at the 10m mark and sprint back 5m. Measures the ability to decelerate and re-accelerate — the most common movement pattern in netball. Lower time = better.',
-        eliteText:'Elite netballers complete the 505 in <strong>2.3-2.5 seconds</strong>. Top players break <strong>2.2 sec</strong>.',
-        hint:'Mark 5m and 15m with cones. Sprint past the 10m mark, plant and sprint back to the 5m start line. Time with a phone stopwatch. Best of 2 attempts.',
-        median:2.4, p25:2.25, p75:2.55, p99:2.8,
-        showCalc:false, showMethod:false, lowerIsBetter:true
-      },
-      {
-        id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps',
-        desc:'Upper body strength endurance in 60 seconds. Full push-ups, chest to floor, arms fully extend.',
-        eliteText:'Elite netballers typically complete <strong>28-42 push-ups</strong> in 60 seconds.',
-        hint:'60 second timer. Full chest-to-floor reps only. No rest during the set.',
-        median:35, p25:25, p75:44, p99:58,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'pullups', name:'Max Pull-Ups', unit:'reps',
-        desc:'Strict pull-ups from a dead hang — chin over bar each rep. No kipping or swinging.',
-        eliteText:'Elite netballers average <strong>5-9 strict pull-ups</strong>. Top performers reach <strong>12+</strong>.',
-        hint:'Dead hang start. Chin must clear the bar. Count only strict reps.',
-        median:7, p25:4, p75:10, p99:15,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'broad', name:'Standing Broad Jump', unit:'cm',
-        desc:'Jump forward off two feet as far as possible. No equipment needed — a direct measure of horizontal explosive power.',
-        eliteText:'Elite netballers average <strong>175-200 cm</strong> on the broad jump.',
-        hint:'Tape on the floor, tape measure. Jump from two feet, hold the landing. Measure to the back heel.',
-        median:188, p25:172, p75:202, p99:220,
-        showCalc:false, showMethod:false
-      }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'The primary explosive power measure in elite netball. Critical for goal circle contests and intercepts.',eliteText:'Elite female netballers average <strong>32 cm</strong>. Top 25% clear <strong>35 cm</strong>. Top 1% reach <strong>46 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app. Can estimate from wall touch.',median:32,p25:28,p75:35,p99:46,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate — enable slow-mo','Approximate — compare carefully']},
+      {id:'vertical',name:'Standing Vertical Jump',unit:'cm',desc:'Static vertical jump from two feet — measures pure lower body power.',eliteText:'Elite netballers average <strong>42-48 cm</strong> on a standing vertical jump.',hint:'Stand beside a wall. Reach up (standing reach). Jump and touch. Subtract standing reach from jump reach.',median:45,p25:40,p75:50,p99:60,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Essential injury prevention in a high-cutting, high-jump-landing sport.',eliteText:'Elite female netballers average <strong>314 N</strong>. Top 25% produce <strong>340 N</strong>. Imbalance under <strong>10%</strong>.',hint:'Requires a NordBord or testing session. Skip if untested.',median:314,p25:287,p75:340,p99:422,showCalc:false,showMethod:false},
+      {id:'change_dir',name:'505 Agility Test',unit:'sec',desc:'Sprint 15m, plant at 10m, sprint back 5m. Lower = better.',eliteText:'Elite netballers complete the 505 in <strong>2.3-2.5 sec</strong>. Top players break <strong>2.2 sec</strong>.',hint:'Mark 5m and 15m with cones. Sprint past 10m mark, plant and sprint back. Best of 2.',median:2.4,p25:2.25,p75:2.55,p99:2.8,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Full push-ups in 60 seconds.',eliteText:'Elite netballers typically complete <strong>28-42 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full reps only.',median:35,p25:25,p75:44,p99:58,showCalc:false,showMethod:false},
+      {id:'pullups',name:'Max Pull-Ups',unit:'reps',desc:'Strict pull-ups — dead hang, chin over bar.',eliteText:'Elite netballers average <strong>5-9 strict pull-ups</strong>.',hint:'Dead hang start. Strict form only.',median:7,p25:4,p75:10,p99:15,showCalc:false,showMethod:false},
+      {id:'broad',name:'Standing Broad Jump',unit:'cm',desc:'Jump forward off two feet. No equipment needed.',eliteText:'Elite netballers average <strong>175-200 cm</strong> on the broad jump.',hint:'Tape on floor, tape measure.',median:188,p25:172,p75:202,p99:220,showCalc:false,showMethod:false}
     ]
   },
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // BASKETBALL WOMEN — VALD Hub normative data (uploaded screenshots)
-  // CMJ:       median 30,  p25=26,  p75=34,  p99=42
-  // RSI (mod): median 1.74,p25=0.79,p75=2.13,p99=2.86
-  // Nordic:    median 308, p25=262, p75=352,  p99=436
-  // Hip Add:   median 348, p25=275, p75=380,  p99=442
-  // Hip Abd:   median 330, p25=297, p75=364,  p99=434
-  // ─────────────────────────────────────────────────────────────────────────
-  basketballw: {
-    label:"Elite Women's Basketball", icon:'🏀',
+  basketballm:{
+    label:"Elite Men's Basketball",icon:'🏀',
     metrics:[
-      {
-        id:'cmj', name:'CMJ Jump Height', unit:'cm',
-        desc:'The primary measure of lower body explosive power in basketball. Used by every elite program worldwide — directly linked to rebounding, blocking and first-step quickness.',
-        eliteText:'VALD Hub normative data: elite women\'s basketballers average <strong>30 cm</strong>. Top 25% clear <strong>34 cm</strong>. Top 1% reach <strong>42 cm</strong>.',
-        hint:'Best measured with ForceDecks or My Jump 2 app (free). Can estimate from wall touch.',
-        median:30, p25:26, p75:34, p99:42,
-        showCalc:false, showMethod:true,
-        methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'],
-        methodNotes:['Exact result — matches VALD Hub data','Good estimate — enable slow-mo camera','Approximate — compare carefully']
-      },
-      {
-        id:'rsi', name:'Reactive Strength Index (Modified)', unit:'RSI',
-        desc:'Modified RSI measures how quickly you can produce force on landing and re-jump. Critical in basketball — boxouts, putbacks and contested rebounds all depend on this quality.',
-        eliteText:'VALD Hub data: elite women\'s basketballers average <strong>1.74 modified RSI</strong>. Top 25% reach <strong>2.13</strong>. Requires ForceDecks — skip if untested.',
-        hint:'Requires ForceDecks. This is a key metric in a VALD testing session. Skip if you have not been tested.',
-        median:1.74, p25:0.79, p75:2.13, p99:2.86,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'nordic', name:'Nordic Hamstring Force', unit:'N',
-        desc:'Eccentric hamstring strength — the #1 injury prevention metric in basketball. Hamstring and ACL injuries are common in elite women\'s basketball.',
-        eliteText:'VALD Hub data: elite women\'s basketballers average <strong>308 N</strong> Nordic force. Top 25% produce <strong>352 N</strong>. Limb imbalance should be under <strong>10%</strong>.',
-        hint:'Requires a NordBord or VALD testing session. Skip if untested — DM to book.',
-        median:308, p25:262, p75:352, p99:436,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'hip_add', name:'Hip Adduction Force', unit:'N',
-        desc:'Hip adduction strength measured on a ForceFrame. A key groin injury prevention marker — weak adductors are a primary risk factor for groin and adductor strains in court sports.',
-        eliteText:'VALD Hub data: elite women\'s basketballers average <strong>348 N</strong> hip adduction. Top 25% produce <strong>380 N</strong>. Limb imbalance should be under <strong>10%</strong>.',
-        hint:'Requires a ForceFrame (VALD) testing session. Skip if untested.',
-        median:348, p25:275, p75:380, p99:442,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'hip_abd', name:'Hip Abduction Force', unit:'N',
-        desc:'Hip abduction strength — your lateral hip stability. Directly linked to ACL injury risk, knee valgus on landing, and cutting mechanics in basketball.',
-        eliteText:'VALD Hub data: elite women\'s basketballers average <strong>330 N</strong> hip abduction. Top 25% produce <strong>364 N</strong>. The adduction:abduction ratio should be close to <strong>1.0</strong>.',
-        hint:'Requires a ForceFrame (VALD) testing session. Skip if untested.',
-        median:330, p25:297, p75:364, p99:434,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'broad', name:'Standing Broad Jump', unit:'cm',
-        desc:'Jump forward off two feet as far as possible — horizontal explosive power. No equipment needed.',
-        eliteText:'Elite women\'s basketballers average <strong>170-190 cm</strong> on the broad jump. Top performers exceed <strong>200 cm</strong>.',
-        hint:'Tape line on the floor. Jump forward, hold your landing. Measure to the back heel with a tape measure.',
-        median:180, p25:165, p75:195, p99:215,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps',
-        desc:'Full push-ups in 60 seconds — chest to floor, full arm extension each rep. A practical upper body strength endurance test.',
-        eliteText:'Elite female basketballers typically complete <strong>28-42 push-ups</strong> in 60 seconds.',
-        hint:'60 second timer. Chest touches floor every rep. Full lockout counts.',
-        median:35, p25:25, p75:44, p99:58,
-        showCalc:false, showMethod:false
-      }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'The primary measure of lower body explosive power in basketball. Directly linked to rebounding, blocking and first-step quickness.',eliteText:'Elite men\'s basketballers (NCAA D1 / NBL level) average <strong>42-46 cm</strong>. Guards tend to score higher — median ~<strong>44 cm</strong>. Top 1% exceed <strong>58 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app. Can estimate from wall touch.',median:44,p25:39,p75:49,p99:58,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate — enable slow-mo','Approximate — compare carefully']},
+      {id:'broad',name:'Standing Broad Jump',unit:'cm',desc:'Horizontal explosive power — no equipment needed. Directly linked to first-step acceleration and lateral quickness.',eliteText:'Elite men\'s basketballers average <strong>220-245 cm</strong> on the broad jump. Top performers exceed <strong>255 cm</strong>.',hint:'Tape line on floor. Two-foot takeoff, hold the landing. Measure to back heel.',median:233,p25:218,p75:248,p99:265,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Eccentric hamstring strength — the #1 injury prevention metric in basketball.',eliteText:'Elite male basketballers average <strong>390-430 N</strong> Nordic force. Limb imbalance should be under <strong>10%</strong>.',hint:'Requires a NordBord or testing session. Skip if untested.',median:410,p25:360,p75:455,p99:540,showCalc:false,showMethod:false},
+      {id:'rsi',name:'Reactive Strength Index (Modified)',unit:'RSI',desc:'Measures how quickly you produce force on landing and re-jump. Critical in basketball for boxouts, putbacks and contested rebounds.',eliteText:'Elite men\'s basketballers average <strong>2.1-2.6 modified RSI</strong>. Requires force plates to measure — skip if untested.',hint:'Requires force plate testing. Skip if you have not been tested.',median:2.3,p25:1.8,p75:2.7,p99:3.4,showCalc:false,showMethod:false},
+      {id:'sprint',name:'30m Sprint Time',unit:'sec',desc:'Sprint flat out over 30 metres. Standing start. Lower = faster.',eliteText:'Elite men\'s basketballers average <strong>3.8-4.1 sec</strong> for 30m. Top-end speed under <strong>3.7 sec</strong>.',hint:'Flat surface, standing start, timed. Best of 2 attempts after warm-up.',median:3.95,p25:3.75,p75:4.15,p99:4.45,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'bench',name:'Bench Press',unit:'× BW',desc:'Relative upper body push strength. Use the calculator.',eliteText:'Elite male basketballers average <strong>1.1-1.4× bodyweight</strong>. Guards typically score lower than bigs.',hint:'Use the calculator above. No gym? Skip and use the push-up test.',median:1.2,p25:1.0,p75:1.4,p99:1.7,showCalc:true,showMethod:false},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Full push-ups in 60 seconds — a practical upper body strength endurance test.',eliteText:'Elite male basketballers typically complete <strong>40-55 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full push-ups — chest to floor, full lockout.',median:48,p25:38,p75:58,p99:70,showCalc:false,showMethod:false}
     ]
   },
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // TENNIS MEN — ATP elite
-  // VALD Hub 2021 men's tennis normative data:
-  // CMJ:     median 39cm, p25=34, p75=44, p99=57; modified RSI median 51.9
-  // Nordic:  median 344N, p25=286, p75=408, p99=496
-  // Hip Add: median 381N, p25=344, p75=426, p99=511
-  // Hip Abd: median 376N, p25=340, p75=412, p99=500
-  // Spider run & grip: published ATP literature
-  // ─────────────────────────────────────────────────────────────────────────
-  tennism: {
-    label:'ATP Elite Tennis', icon:'🎾',
+  basketballw:{
+    label:"Elite Women's Basketball",icon:'🏀',
     metrics:[
-      {
-        id:'cmj', name:'CMJ Jump Height', unit:'cm',
-        desc:'Lower body explosive power — linked to serve velocity, net approaches and first-step quickness. Used in every ATP high performance program.',
-        eliteText:'VALD Hub 2021 men\'s tennis: ATP-level players average <strong>39 cm</strong>. Top 25% clear <strong>44 cm</strong>. Top 1% reach <strong>57 cm</strong>. Modified RSI median is <strong>51.9</strong>.',
-        hint:'Best measured with ForceDecks or My Jump 2 app. Can estimate from wall touch.',
-        median:39, p25:34, p75:44, p99:57,
-        showCalc:false, showMethod:true,
-        methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'],
-        methodNotes:['Exact result — matches VALD Hub ATP data','Good estimate — enable slow-mo camera','Approximate — compare carefully']
-      },
-      {
-        id:'spider_run', name:'Spider Run Agility Test', unit:'sec',
-        desc:'The most sport-specific agility test for tennis. Sprint from the centre T to each of 5 court positions and back — directly mimics the demands of a rally. Lower time = better.',
-        eliteText:'Elite ATP players average <strong>15.5-16.5 sec</strong> on the spider run. Top performers run under <strong>15.0 sec</strong>.',
-        hint:'Place 5 balls at the 4 corners and net post positions of a full court. Sprint from the T to each position and back, touching each spot. Time the full circuit. Best of 2 attempts.',
-        median:15.9, p25:15.2, p75:16.6, p99:17.8,
-        showCalc:false, showMethod:false, lowerIsBetter:true
-      },
-      {
-        id:'grip', name:'Grip Strength (Dominant Hand)', unit:'kg',
-        desc:'Tennis-specific performance marker linked to serve velocity, topspin generation and racket stability under impact. Measured with a hand dynamometer.',
-        eliteText:'ATP players average <strong>54-60 kg</strong> grip strength. Top servers and baseliners consistently test above <strong>58 kg</strong>.',
-        hint:'Use a hand dynamometer (available in physio clinics and many gyms). Squeeze maximally 3 times — record the best. No dynamometer? Skip this metric.',
-        median:56, p25:50, p75:62, p99:72,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'nordic', name:'Nordic Hamstring Force', unit:'N',
-        desc:'Eccentric hamstring strength — the key injury prevention metric. High training volume and explosive stop-start patterns make tennis players highly vulnerable to hamstring injury.',
-        eliteText:'VALD Hub 2021 men\'s tennis: ATP players average <strong>344 N</strong> Nordic force. Top 25% produce <strong>408 N</strong>. Limb imbalance median is 5.9% — dominant-side asymmetry requires monitoring.',
-        hint:'Requires a NordBord or VALD testing session. Skip if untested — DM to book.',
-        median:344, p25:286, p75:408, p99:496,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'hip_add', name:'Hip Adduction Force', unit:'N',
-        desc:'Hip adduction strength — groin injury prevention. Tennis involves extreme lateral loading in every rally, making adductor strength a critical screening metric.',
-        eliteText:'VALD Hub 2021 men\'s tennis: ATP players average <strong>381 N</strong> hip adduction. Top 25% produce <strong>426 N</strong>. Adduction:abduction ratio should be close to <strong>1.0</strong> (median 1.02).',
-        hint:'Requires a ForceFrame (VALD) testing session. Skip if untested.',
-        median:381, p25:344, p75:426, p99:511,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'hip_abd', name:'Hip Abduction Force', unit:'N',
-        desc:'Hip abduction strength — lateral hip stability. In tennis, weak abductors contribute to knee valgus on serve, ACL risk on split-step landings, and adductor overload.',
-        eliteText:'VALD Hub 2021 men\'s tennis: ATP players average <strong>376 N</strong> hip abduction. Top 25% produce <strong>412 N</strong>. Limb imbalance should stay under <strong>10%</strong>.',
-        hint:'Requires a ForceFrame (VALD) testing session. Skip if untested.',
-        median:376, p25:340, p75:412, p99:500,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps',
-        desc:'Upper body strength endurance — practical and no-equipment. Correlates with serve and stroke capacity across a long match.',
-        eliteText:'Elite ATP players typically complete <strong>45-60 push-ups</strong> in 60 seconds. Top performers exceed <strong>65 reps</strong>.',
-        hint:'60 second timer. Full push-ups — chest touches floor, arms fully extend. No kipping or half-reps.',
-        median:50, p25:40, p75:60, p99:72,
-        showCalc:false, showMethod:false
-      }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'The primary measure of lower body explosive power in basketball.',eliteText:'Elite women\'s basketballers average <strong>30 cm</strong>. Top 25% clear <strong>34 cm</strong>. Top 1% reach <strong>42 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app. Can estimate from wall touch.',median:30,p25:26,p75:34,p99:42,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate — enable slow-mo','Approximate — compare carefully']},
+      {id:'rsi',name:'Reactive Strength Index (Modified)',unit:'RSI',desc:'Measures how quickly you produce force on landing and re-jump. Critical for boxouts, putbacks and contested rebounds.',eliteText:'Elite women\'s basketballers average <strong>1.74 modified RSI</strong>. Top 25% reach <strong>2.13</strong>. Requires force plates — skip if untested.',hint:'Requires force plate testing. Skip if untested.',median:1.74,p25:0.79,p75:2.13,p99:2.86,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Eccentric hamstring strength — the #1 injury prevention metric.',eliteText:'Elite women\'s basketballers average <strong>308 N</strong> Nordic force. Top 25% produce <strong>352 N</strong>. Imbalance under <strong>10%</strong>.',hint:'Requires a testing session. Skip if untested.',median:308,p25:262,p75:352,p99:436,showCalc:false,showMethod:false},
+      {id:'hip_add',name:'Hip Adduction Force',unit:'N',desc:'Key groin injury prevention marker in court sports.',eliteText:'Elite women\'s basketballers average <strong>348 N</strong> hip adduction. Top 25% produce <strong>380 N</strong>.',hint:'Requires a ForceFrame testing session. Skip if untested.',median:348,p25:275,p75:380,p99:442,showCalc:false,showMethod:false},
+      {id:'hip_abd',name:'Hip Abduction Force',unit:'N',desc:'Lateral hip stability — linked to ACL risk and cutting mechanics.',eliteText:'Elite women\'s basketballers average <strong>330 N</strong> hip abduction. Top 25% produce <strong>364 N</strong>. Adduction:abduction ratio should be ~<strong>1.0</strong>.',hint:'Requires a ForceFrame testing session. Skip if untested.',median:330,p25:297,p75:364,p99:434,showCalc:false,showMethod:false},
+      {id:'broad',name:'Standing Broad Jump',unit:'cm',desc:'Horizontal explosive power. No equipment needed.',eliteText:'Elite women\'s basketballers average <strong>170-190 cm</strong>. Top performers exceed <strong>200 cm</strong>.',hint:'Tape line on floor. Jump forward, hold landing. Measure to back heel.',median:180,p25:165,p75:195,p99:215,showCalc:false,showMethod:false},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Full push-ups in 60 seconds.',eliteText:'Elite female basketballers typically complete <strong>28-42 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full reps.',median:35,p25:25,p75:44,p99:58,showCalc:false,showMethod:false}
     ]
   },
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // TENNIS WOMEN — WTA elite
-  // VALD Hub 2021 women's tennis normative data:
-  // CMJ:     median 28cm, p25=25, p75=31, p99=36; modified RSI median 36.3
-  // Nordic:  median 273N, p25=225, p75=317, p99=396
-  // Hip Add: median 311N, p25=282, p75=342, p99=412
-  // Hip Abd: median 318N, p25=295, p75=332, p99=398
-  // Spider run & grip: published WTA literature
-  // ─────────────────────────────────────────────────────────────────────────
-  tennisw: {
-    label:'WTA Elite Tennis', icon:'🎾',
+  tennism:{
+    label:'ATP Elite Tennis',icon:'🎾',
     metrics:[
-      {
-        id:'cmj', name:'CMJ Jump Height', unit:'cm',
-        desc:'Lower body explosive power — linked to serve velocity, net approaches and first-step quickness. Used in every WTA high performance program.',
-        eliteText:'VALD Hub 2021 women\'s tennis: WTA-level players average <strong>28 cm</strong>. Top 25% clear <strong>31 cm</strong>. Top 1% reach <strong>36 cm</strong>. Modified RSI median is <strong>36.3</strong>.',
-        hint:'Best measured with ForceDecks or My Jump 2 app. Can estimate from wall touch.',
-        median:28, p25:25, p75:31, p99:36,
-        showCalc:false, showMethod:true,
-        methods:['ForceDecks / VALD','My Jump 2 App','Wall touch estimate'],
-        methodNotes:['Exact result — matches VALD Hub WTA data','Good estimate — enable slow-mo camera','Approximate — compare carefully']
-      },
-      {
-        id:'spider_run', name:'Spider Run Agility Test', unit:'sec',
-        desc:'The most sport-specific agility test for tennis. Sprint from the centre T to each of 5 court positions and back — directly mimics the demands of a rally. Lower time = better.',
-        eliteText:'Elite WTA players average <strong>16.5-17.5 sec</strong> on the spider run. Top performers run under <strong>16.0 sec</strong>.',
-        hint:'Place 5 balls at the 4 corners and net post positions of a full court. Sprint from the T to each position and back, touching each spot. Time the full circuit. Best of 2 attempts.',
-        median:17.0, p25:16.2, p75:17.8, p99:19.2,
-        showCalc:false, showMethod:false, lowerIsBetter:true
-      },
-      {
-        id:'grip', name:'Grip Strength (Dominant Hand)', unit:'kg',
-        desc:'Tennis-specific performance marker linked to serve velocity, topspin generation and racket stability under impact. Measured with a hand dynamometer.',
-        eliteText:'WTA players average <strong>36-42 kg</strong> grip strength. A strong grip is a consistent differentiator between club and tour-level players.',
-        hint:'Use a hand dynamometer (available in physio clinics and many gyms). Squeeze maximally 3 times — record the best. No dynamometer? Skip this metric.',
-        median:39, p25:34, p75:44, p99:54,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'nordic', name:'Nordic Hamstring Force', unit:'N',
-        desc:'Eccentric hamstring strength — key injury prevention metric. High training volume and explosive stop-start patterns make tennis players highly vulnerable to hamstring injury.',
-        eliteText:'VALD Hub 2021 women\'s tennis: WTA players average <strong>273 N</strong> Nordic force. Top 25% produce <strong>317 N</strong>. Limb imbalance median is 5.9% — dominant-side asymmetry requires monitoring.',
-        hint:'Requires a NordBord or VALD testing session. Skip if untested — DM to book.',
-        median:273, p25:225, p75:317, p99:396,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'hip_add', name:'Hip Adduction Force', unit:'N',
-        desc:'Hip adduction strength — groin injury prevention. Tennis involves extreme lateral loading in every rally, making adductor strength a critical screening metric.',
-        eliteText:'VALD Hub 2021 women\'s tennis: WTA players average <strong>311 N</strong> hip adduction. Top 25% produce <strong>342 N</strong>. Adduction:abduction ratio should be close to <strong>1.0</strong> (median 0.98).',
-        hint:'Requires a ForceFrame (VALD) testing session. Skip if untested.',
-        median:311, p25:282, p75:342, p99:412,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'hip_abd', name:'Hip Abduction Force', unit:'N',
-        desc:'Hip abduction strength — lateral hip stability. In tennis, weak abductors contribute to knee valgus on serve, ACL risk on split-step landings, and adductor overload.',
-        eliteText:'VALD Hub 2021 women\'s tennis: WTA players average <strong>318 N</strong> hip abduction. Top 25% produce <strong>332 N</strong>. Limb imbalance should stay under <strong>10%</strong>.',
-        hint:'Requires a ForceFrame (VALD) testing session. Skip if untested.',
-        median:318, p25:295, p75:332, p99:398,
-        showCalc:false, showMethod:false
-      },
-      {
-        id:'pushups', name:'Max Push-Ups (60 seconds)', unit:'reps',
-        desc:'Upper body strength endurance — practical and no-equipment. Correlates with serve and stroke capacity across a long match.',
-        eliteText:'Elite WTA players typically complete <strong>28-40 push-ups</strong> in 60 seconds. Top performers exceed <strong>45 reps</strong>.',
-        hint:'60 second timer. Full push-ups — chest touches floor, arms fully extend. No kipping or half-reps.',
-        median:34, p25:24, p75:44, p99:58,
-        showCalc:false, showMethod:false
-      }
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'Lower body explosive power — linked to serve velocity and first-step quickness.',eliteText:'ATP-level players average <strong>39 cm</strong>. Top 25% clear <strong>44 cm</strong>. Top 1% reach <strong>57 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app.',median:39,p25:34,p75:44,p99:57,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate — enable slow-mo','Approximate']},
+      {id:'spider_run',name:'Spider Run Agility Test',unit:'sec',desc:'Most sport-specific agility test for tennis. Sprint from centre T to 5 court positions and back. Lower = better.',eliteText:'Elite ATP players average <strong>15.5-16.5 sec</strong>. Top performers run under <strong>15.0 sec</strong>.',hint:'Place 5 balls at the 4 corners and net post positions. Sprint from T to each position and back. Time the full circuit.',median:15.9,p25:15.2,p75:16.6,p99:17.8,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'grip',name:'Grip Strength (Dominant Hand)',unit:'kg',desc:'Tennis-specific marker linked to serve velocity and racket stability.',eliteText:'ATP players average <strong>54-60 kg</strong> grip strength.',hint:'Hand dynamometer — available in physio clinics. Squeeze 3 times, record best. Skip if no dynamometer.',median:56,p25:50,p75:62,p99:72,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Hamstring injury prevention — critical in a high-volume stop-start sport.',eliteText:'ATP players average <strong>344 N</strong> Nordic force. Top 25% produce <strong>408 N</strong>.',hint:'Requires a testing session. Skip if untested.',median:344,p25:286,p75:408,p99:496,showCalc:false,showMethod:false},
+      {id:'hip_add',name:'Hip Adduction Force',unit:'N',desc:'Groin injury prevention — tennis involves extreme lateral loading.',eliteText:'ATP players average <strong>381 N</strong> hip adduction. Top 25% produce <strong>426 N</strong>. Adduction:abduction ratio ~<strong>1.0</strong>.',hint:'Requires a ForceFrame testing session. Skip if untested.',median:381,p25:344,p75:426,p99:511,showCalc:false,showMethod:false},
+      {id:'hip_abd',name:'Hip Abduction Force',unit:'N',desc:'Lateral hip stability. Weak abductors contribute to ACL risk on split-step landings.',eliteText:'ATP players average <strong>376 N</strong> hip abduction. Top 25% produce <strong>412 N</strong>.',hint:'Requires a ForceFrame testing session. Skip if untested.',median:376,p25:340,p75:412,p99:500,showCalc:false,showMethod:false},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Upper body strength endurance — correlates with serve capacity across a long match.',eliteText:'Elite ATP players typically complete <strong>45-60 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full push-ups only.',median:50,p25:40,p75:60,p99:72,showCalc:false,showMethod:false}
+    ]
+  },
+  tennisw:{
+    label:'WTA Elite Tennis',icon:'🎾',
+    metrics:[
+      {id:'cmj',name:'CMJ Jump Height',unit:'cm',desc:'Lower body explosive power — linked to serve velocity and first-step quickness.',eliteText:'WTA-level players average <strong>28 cm</strong>. Top 25% clear <strong>31 cm</strong>. Top 1% reach <strong>36 cm</strong>.',hint:'Best measured with a force plate or My Jump 2 app.',median:28,p25:25,p75:31,p99:36,showCalc:false,showMethod:true,methods:['Force plate / lab','My Jump 2 App','Wall touch estimate'],methodNotes:['Exact result','Good estimate — enable slow-mo','Approximate']},
+      {id:'spider_run',name:'Spider Run Agility Test',unit:'sec',desc:'Most sport-specific agility test for tennis. Lower = better.',eliteText:'Elite WTA players average <strong>16.5-17.5 sec</strong>. Top performers run under <strong>16.0 sec</strong>.',hint:'Place 5 balls at the 4 corners and net post positions. Sprint from T to each and back. Time the full circuit.',median:17.0,p25:16.2,p75:17.8,p99:19.2,showCalc:false,showMethod:false,lowerIsBetter:true},
+      {id:'grip',name:'Grip Strength (Dominant Hand)',unit:'kg',desc:'Tennis-specific marker linked to serve velocity and racket stability.',eliteText:'WTA players average <strong>36-42 kg</strong> grip strength.',hint:'Hand dynamometer. Squeeze 3 times, record best. Skip if no dynamometer.',median:39,p25:34,p75:44,p99:54,showCalc:false,showMethod:false},
+      {id:'nordic',name:'Nordic Hamstring Force',unit:'N',desc:'Hamstring injury prevention. Dominant-side asymmetry common in tennis.',eliteText:'WTA players average <strong>273 N</strong> Nordic force. Top 25% produce <strong>317 N</strong>.',hint:'Requires a testing session. Skip if untested.',median:273,p25:225,p75:317,p99:396,showCalc:false,showMethod:false},
+      {id:'hip_add',name:'Hip Adduction Force',unit:'N',desc:'Groin injury prevention — extreme lateral loading in every rally.',eliteText:'WTA players average <strong>311 N</strong> hip adduction. Top 25% produce <strong>342 N</strong>.',hint:'Requires a ForceFrame testing session. Skip if untested.',median:311,p25:282,p75:342,p99:412,showCalc:false,showMethod:false},
+      {id:'hip_abd',name:'Hip Abduction Force',unit:'N',desc:'Lateral hip stability — linked to ACL risk and adductor overload.',eliteText:'WTA players average <strong>318 N</strong> hip abduction. Top 25% produce <strong>332 N</strong>.',hint:'Requires a ForceFrame testing session. Skip if untested.',median:318,p25:295,p75:332,p99:398,showCalc:false,showMethod:false},
+      {id:'pushups',name:'Max Push-Ups (60 sec)',unit:'reps',desc:'Upper body strength endurance across a long match.',eliteText:'Elite WTA players typically complete <strong>28-40 push-ups</strong> in 60 seconds.',hint:'60 second timer. Full push-ups only.',median:34,p25:24,p75:44,p99:58,showCalc:false,showMethod:false}
     ]
   }
 };
 
-// ═══════════════ STATE ═══════════════
-let selectedSport=null, userName='', currentMetricIndex=0;
-let userScores={}, skippedMetrics={}, userAge=null, methodUsed={};
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let selectedSport=null,userName='',currentMetricIndex=0;
+let userScores={},skippedMetrics={},userAge=null,methodUsed={};
 
-// ═══════════════ SPORT LABELS ═══════════════
-const SPORT_LABELS = {
-  aflm:'AFL Men', aflw:'AFLW',
-  soccerm:'Premier League Men', soccerw:"Women's Soccer",
+const SPORT_LABELS={
+  aflm:'AFL Men',aflw:'AFLW',
+  soccerm:'Premier League Men',soccerw:"Women's Soccer",
   netballw:'Super Netball / Diamonds',
+  basketballm:"Elite Men's Basketball",
   basketballw:"Elite Women's Basketball",
   tennism:'ATP Elite Tennis',
   tennisw:'WTA Elite Tennis'
 };
 
-// ═══════════════ NAV ═══════════════
+// ════════════════════════════════════
+// NAV
+// ════════════════════════════════════
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -751,9 +868,10 @@ function selectSport(sport){
 
 function goToEmail(){
   if(!selectedSport)return;
-  const el=document.getElementById('sport-tag-display');
-  el.style.display='block';
-  el.textContent='⚡ Benchmarking against: '+SPORT_LABELS[selectedSport];
+  const pill=document.getElementById('sport-pill');
+  const pillText=document.getElementById('sport-pill-text');
+  pill.style.display='flex';
+  pillText.textContent='Benchmarking against: '+SPORT_LABELS[selectedSport];
   goTo('screen-email');
 }
 
@@ -774,7 +892,9 @@ function getAgeGroup(age){
   return'40plus';
 }
 
-// ═══════════════ MAILCHIMP ═══════════════
+// ════════════════════════════════════
+// MAILCHIMP
+// ════════════════════════════════════
 function submitToMailchimp(email,fname,sportText,age,trainAge,tested){
   const action='https://coachcali.us21.list-manage.com/subscribe/post-json?u=9f956008f59f50c07a3e70f4d&id=4dfda44567&f_id=00fea1e6f0';
   const cb='mc_'+Date.now();
@@ -797,7 +917,9 @@ function submitScoresToMailchimp(email,scores,tags){
   setTimeout(function(){try{delete window[cb];}catch(e){}if(s.parentNode)s.parentNode.removeChild(s);},10000);
 }
 
-// ═══════════════ METRICS ═══════════════
+// ════════════════════════════════════
+// METRICS
+// ════════════════════════════════════
 function goToMetrics(){
   userName=document.getElementById('input-name').value.trim();
   const email=document.getElementById('input-email').value.trim();
@@ -807,53 +929,70 @@ function goToMetrics(){
   const tested=document.getElementById('input-tested').value;
   userAge=parseInt(age)||null;
   submitToMailchimp(email,userName,sportText,age,trainAge,tested);
-  gtag('event','email_submitted',{sport:selectedSport,age_group:getAgeGroup(userAge),train_exp:trainAge,vald_tested:tested});
+  gtag('event','email_submitted',{sport:selectedSport,age_group:getAgeGroup(userAge)});
   currentMetricIndex=0;userScores={};skippedMetrics={};methodUsed={};
   showMetric(0);
   goTo('screen-metric');
+}
+
+function buildDots(total,current){
+  const wrap=document.getElementById('step-dots');
+  wrap.innerHTML='';
+  for(let i=0;i<total;i++){
+    const d=document.createElement('div');
+    d.className='step-dot'+(i<current?' done':i===current?' active':'');
+    wrap.appendChild(d);
+  }
 }
 
 function showMetric(index){
   const metrics=BENCHMARKS[selectedSport].metrics;
   if(index>=metrics.length){showResults();return;}
   const m=metrics[index];
-  const pct=(index/metrics.length)*100;
+  const pct=Math.round((index/metrics.length)*100);
   document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('step-indicator').textContent='Test '+(index+1)+' of '+metrics.length;
+  document.getElementById('step-label').textContent='Test '+(index+1)+' of '+metrics.length;
+  buildDots(metrics.length,index);
+  // Animate card
+  const card=document.getElementById('metric-card');
+  card.style.animation='none';
+  card.offsetHeight;
+  card.style.animation='slideIn 0.3s ease';
   document.getElementById('metric-title').textContent=m.name;
   document.getElementById('metric-desc').textContent=m.desc;
-  document.getElementById('elite-callout-text').innerHTML=m.eliteText;
+  document.getElementById('elite-text').innerHTML=m.eliteText;
   document.getElementById('metric-unit').textContent=m.unit;
   document.getElementById('input-hint').textContent=m.hint;
   document.getElementById('metric-input').value='';
-  document.getElementById('btn-metric-next').disabled=true;
+  document.getElementById('btn-next').disabled=true;
   document.getElementById('bench-calc').style.display=m.showCalc?'block':'none';
   if(m.showCalc){
     document.getElementById('calc-bw').value='';
     document.getElementById('calc-1rm').value='';
-    document.getElementById('bench-result').textContent='Enter your body weight and 1RM above';
+    document.getElementById('bench-result').textContent='Enter body weight and 1RM above';
+    window._benchCalcVal=null;
   }
-  const ms=document.getElementById('method-selector');
+  const mw=document.getElementById('method-wrap');
   if(m.showMethod&&m.methods){
-    ms.style.display='block';
-    const opts=document.getElementById('method-options');
-    opts.innerHTML='';
+    mw.style.display='block';
+    const pills=document.getElementById('method-pills');
+    pills.innerHTML='';
     m.methods.forEach(function(method,i){
       const btn=document.createElement('button');
-      btn.className='method-btn'+(i===0?' active':'');
+      btn.className='method-pill'+(i===0?' active':'');
       btn.textContent=method;
       btn.onclick=function(){
-        document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.method-pill').forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
         methodUsed[m.id]=method;
         document.getElementById('method-note').textContent=m.methodNotes?m.methodNotes[i]:'';
       };
-      opts.appendChild(btn);
+      pills.appendChild(btn);
     });
     methodUsed[m.id]=m.methods[0];
     document.getElementById('method-note').textContent=m.methodNotes?m.methodNotes[0]:'';
   } else {
-    ms.style.display='none';
+    mw.style.display='none';
   }
   document.getElementById('metric-input').focus();
 }
@@ -872,7 +1011,7 @@ function useBenchCalc(){
 }
 function onMetricInput(){
   const v=document.getElementById('metric-input').value;
-  document.getElementById('btn-metric-next').disabled=v===''||isNaN(parseFloat(v));
+  document.getElementById('btn-next').disabled=v===''||isNaN(parseFloat(v));
 }
 function nextMetric(){
   const m=BENCHMARKS[selectedSport].metrics[currentMetricIndex];
@@ -892,7 +1031,9 @@ function prevMetric(){
   showMetric(currentMetricIndex);
 }
 
-// ═══════════════ RESULTS ═══════════════
+// ════════════════════════════════════
+// RESULTS
+// ════════════════════════════════════
 function getPctRank(score,m){
   if(m.lowerIsBetter){
     if(score<=m.p25)return Math.round(75+((m.p25-score)/(m.p25-m.p99*0.9))*24);
@@ -922,11 +1063,13 @@ function showResults(){
   const sport=BENCHMARKS[selectedSport];
   const metrics=sport.metrics;
   const email=document.getElementById('input-email').value.trim();
-  document.getElementById('result-sport-badge').innerHTML=sport.icon+' '+sport.label;
-  document.getElementById('result-name-heading').textContent=(userName?userName+"'s":'Your')+' Elite Benchmark';
   const ageCtx=userAge?' — Age '+userAge:'';
-  document.getElementById('result-subheading').textContent='Here\'s exactly where you sit against elite athletes in your sport'+ageCtx+'.';
-  document.getElementById('dm-trigger-text').textContent='TEST NOW - '+SPORT_LABELS[selectedSport];
+
+  document.getElementById('result-sport-badge').innerHTML=sport.icon+' '+sport.label;
+  document.getElementById('result-heading').textContent=(userName?userName+"'s":'Your')+' Elite Benchmark';
+  document.getElementById('result-sub').textContent='Here\'s exactly where you sit against elite athletes in your sport'+ageCtx+'.';
+  document.getElementById('dm-text').textContent='TEST NOW - '+SPORT_LABELS[selectedSport];
+
   let total=0,counted=0,scoreParts=[],tagParts=[];
   metrics.forEach(function(m){
     if(userScores[m.id]!==undefined){
@@ -939,9 +1082,30 @@ function showResults(){
   });
   const avg=counted>0?Math.round(total/counted):0;
   if(email&&scoreParts.length>0)submitScoresToMailchimp(email,scoreParts.join(' | '),SPORT_LABELS[selectedSport]+' | '+tagParts.join(' | '));
-  document.getElementById('overall-score').textContent=avg+'%ile';
+
+  // Gauge
+  document.getElementById('gauge-score').textContent=avg+'%ile';
+  setTimeout(function(){document.getElementById('gauge-bar').style.width=Math.min(avg,99)+'%';},100);
   const descs=[[75,"You're performing at elite level. Keep pushing."],[50,"You're meeting professional standards. Targeted work will take you further."],[25,"You're on the development track. Clear gaps to close — let's get to work."],[0,"Significant room to grow. These gaps respond fast to the right training."]];
-  document.getElementById('overall-desc').textContent=descs.find(d=>avg>=d[0])[1];
+  document.getElementById('gauge-desc').textContent=descs.find(d=>avg>=d[0])[1];
+
+  // Screenshot card
+  document.getElementById('share-sport-label').textContent=sport.icon+' '+sport.label;
+  document.getElementById('share-name-heading').textContent=(userName||'Your')+' Benchmark';
+  document.getElementById('share-score-big').textContent=avg+'%ile';
+  const shareGrid=document.getElementById('share-metrics-grid');
+  shareGrid.innerHTML='';
+  metrics.forEach(function(m){
+    if(userScores[m.id]!==undefined){
+      const pct=getPctRank(userScores[m.id],m);
+      const item=document.createElement('div');
+      item.className='share-metric-item';
+      item.innerHTML='<div class="share-metric-name">'+m.name+'</div><div class="share-metric-val">'+userScores[m.id]+(m.unit?' '+m.unit:'')+'</div><div class="share-metric-pct">~'+pct+'th %ile</div>';
+      shareGrid.appendChild(item);
+    }
+  });
+
+  // Result cards
   const container=document.getElementById('result-cards');
   container.innerHTML='';
   metrics.forEach(function(m){
@@ -949,58 +1113,72 @@ function showResults(){
     const score=userScores[m.id];
     const pct=skipped?null:getPctRank(score,m);
     const badge=skipped?null:getBadge(pct);
-    const barColor=skipped?'#444':getBarColor(pct);
+    const barColor=skipped?'#333':getBarColor(pct);
     const barW=skipped?0:Math.min(pct,99);
     const diff=skipped?null:score-m.median;
-    const diffAbs=diff===null?0:Math.abs(diff).toFixed(m.id==='bench'||m.id==='rsi'||m.id==='grip'?2:1);
+    const isRsi=m.id==='rsi'||m.id==='bench';
+    const diffAbs=diff===null?0:Math.abs(diff).toFixed(isRsi?2:1);
     const diffText=diff===null?'':(diff>=0?'+':'-')+diffAbs;
     const diffColor=diff===null?'':(m.lowerIsBetter?(diff<=0?'#22C55E':'#EF4444'):(diff>=0?'#22C55E':'#EF4444'));
     const showFix=!skipped&&pct<50;
     const showGood=!skipped&&pct>=50;
     const exs=EXERCISES[m.id]||[];
-    const isApprox=methodUsed[m.id]&&methodUsed[m.id]!=='ForceDecks / VALD';
+    const isApprox=methodUsed[m.id]&&methodUsed[m.id]!=='Force plate / lab';
     let exerciseHTML='';
     if(showFix){
-      exerciseHTML=exs.map(function(e){return'<div class="exercise-item"><div class="exercise-name">'+e.name+'</div><div class="exercise-cue">"'+e.cue+'"</div><div class="exercise-sets">'+e.sets+'</div></div>';}).join('');
+      exerciseHTML=exs.map(function(e){
+        return'<div class="ex-item"><div class="ex-name">'+e.name+'</div><div class="ex-cue">"'+e.cue+'"</div><div class="ex-sets">'+e.sets+'</div></div>';
+      }).join('');
     }
     const card=document.createElement('div');
     card.className='result-card';
-    if(skipped)card.style.opacity='0.4';
+    if(skipped)card.style.opacity='0.35';
     card.innerHTML=
       '<div class="result-card-top">'+
         '<div>'+
           '<div class="result-metric-name">'+m.name+'</div>'+
           '<div style="display:flex;align-items:baseline;gap:6px">'+
-            (skipped?'<span style="color:#555;font-size:14px">Not tested</span>':
-              '<span class="result-your-score" style="color:'+barColor+'">'+score+(m.unit?' '+m.unit:'')+'</span>'+
-              (isApprox?'<span class="approx-badge">~estimate</span>':'')
+            (skipped?'<span style="color:#444;font-size:14px">Not tested</span>':
+              '<span class="result-score" style="color:'+barColor+'">'+score+(m.unit?' '+m.unit:'')+'</span>'+
+              (isApprox?'<span class="approx-tag">~estimate</span>':'')
             )+
           '</div>'+
         '</div>'+
         (badge?'<div class="result-badge '+badge.cls+'">'+badge.label+'</div>':'')+
       '</div>'+
-      '<div class="pct-bar-track">'+
-        '<div class="pct-bar-fill" style="width:'+barW+'%;background:'+barColor+'"></div>'+
-        '<div class="pct-bar-median" style="left:50%"></div>'+
+      '<div class="pct-track">'+
+        '<div class="pct-fill" style="width:'+barW+'%;background:'+barColor+'"></div>'+
+        '<div class="pct-marker" style="left:50%"></div>'+
       '</div>'+
-      '<div class="pct-labels"><span class="pct-label">'+(m.lowerIsBetter?'Slower':'0%ile')+'</span><span class="pct-label mid">↑ Elite median</span><span class="pct-label">'+(m.lowerIsBetter?'Faster':'99%ile')+'</span></div>'+
-      (!skipped?'<div class="vs-elite"><span>vs elite median ('+m.median+(m.unit?' '+m.unit:'')+(m.lowerIsBetter?' sec':'')+'):</span><strong style="color:'+diffColor+'">'+diffText+' '+(m.unit||'')+'</strong><span style="margin-left:auto;color:#555;font-size:11px">~'+pct+'th percentile</span></div>':'')+
+      '<div class="pct-labels">'+
+        '<span class="pct-lbl">'+(m.lowerIsBetter?'Slower':'0%ile')+'</span>'+
+        '<span class="pct-lbl mid">↑ Elite median</span>'+
+        '<span class="pct-lbl">'+(m.lowerIsBetter?'Faster':'99%ile')+'</span>'+
+      '</div>'+
+      (!skipped?
+        '<div class="vs-row">'+
+          '<span>vs elite median ('+m.median+(m.unit?' '+m.unit:'')+'): </span>'+
+          '<strong style="color:'+diffColor+'">'+diffText+' '+(m.unit||'')+'</strong>'+
+          '<span class="pct-num">~'+pct+'th percentile</span>'+
+        '</div>':'')+
       (showFix?'<div class="fix-box"><div class="fix-label">Close the gap — start here</div>'+exerciseHTML+'</div>':'')+
       (showGood?'<div class="good-box"><div class="good-label">✓ Maintaining elite status</div><div class="good-text">'+(GOOD_ADVICE[m.id]||'')+'</div></div>':'')+
     '';
     container.appendChild(card);
   });
-  document.getElementById('progress-fill').style.width='100%';
+
   gtag('event','results_viewed',{sport:selectedSport,overall_percentile:avg});
   goTo('screen-results');
 }
 
-// ═══════════════ DM + SHARE ═══════════════
+// ════════════════════════════════════
+// DM + SHARE
+// ════════════════════════════════════
 function copyDM(){
-  const text=document.getElementById('dm-trigger-text').textContent;
+  const text=document.getElementById('dm-text').textContent;
   gtag('event','dm_copied',{sport:selectedSport});
   navigator.clipboard.writeText(text).then(function(){
-    document.getElementById('copy-confirm').textContent='✓ Copied! Now open Instagram and DM @coachcaliii';
+    document.getElementById('copy-confirm').textContent='✓ Copied! Open Instagram and DM @coachcaliii';
     setTimeout(function(){document.getElementById('copy-confirm').textContent='';},4000);
   }).catch(function(){
     document.getElementById('copy-confirm').textContent='Copy: '+text;
@@ -1017,7 +1195,7 @@ function generateShare(){
       lines.push(bar+' '+m.name+': '+userScores[m.id]+(m.unit?' '+m.unit:'')+'(~'+pct+'%ile vs elite)');
     }
   });
-  lines.push('','How do you rank? → coachcali.github.io/The-Performance-Benchmark','@coachcaliii');
+  lines.push('','Test yourself free → stefancali26-oss.github.io/The-Performance-Benchmark','@coachcaliii | coachcali.com.au');
   const text=lines.join('\n');
   const box=document.getElementById('share-text-box');
   box.style.display='block';
